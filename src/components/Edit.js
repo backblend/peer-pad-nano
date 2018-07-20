@@ -215,7 +215,7 @@ class Edit extends Component {
                     placeholder='Document Title'
                     readOnly={!canEdit}
                     data-id='document-title-input'
-                   />
+                  />
                 </div>
                 <div className='dn f7 pigeon-post'>
                   <b className='fw5'>Last change:</b> today, 12:00AM
@@ -236,7 +236,7 @@ class Edit extends Component {
               onDebuggingStart={onDebuggingStart}
               onDebuggingStop={onDebuggingStop}
               isDebuggingEnabled={isDebuggingEnabled}
-              />
+            />
           </div>
         </div>
       </div>

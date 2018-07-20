@@ -78,7 +78,7 @@ export default class PeersButton extends Component {
           data-id='peers-button'
           data-peer-count={count}
           data-peer-id={myId}
-          >
+        >
           <UserIcon className='db stroke--current-color hover--bright-turquoise' />
           {count > 0 ? (
             <span className='absolute top-0 right-0 br-100 bg-bright-turquoise' style={{width: '12px', lineHeight: '12px', fontSize: '9px', right: '-3px'}}>{count}</span>
