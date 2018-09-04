@@ -8,13 +8,11 @@ import mergeAliases from '../lib/merge-aliases'
 import takeSnapshot from '../lib/take-snapshot'
 
 import Header from './header/Header'
-import ViewMode from './header/ViewMode'
 import { NewButton, PeersButton, NotificationsButton } from './header/buttons'
 import EditorArea from './EditorArea'
 import Status from './Status'
 import DocViewer from './DocViewer'
 import { toSnapshotUrl } from './SnapshotLink'
-import Warning from './Warning'
 
 const debugScope = 'peer-star:collaboration:*'
 
@@ -33,7 +31,7 @@ class Edit extends Component {
       room: {},
       canEdit: keys.split('-').length >= 2,
       encodedKeys: keys,
-      viewMode: 'both',
+      viewMode: 'source',
       snapshots: [],
       alias: window.localStorage.getItem('alias'),
       doc: null,
@@ -183,13 +181,7 @@ class Edit extends Component {
 
     return (
       <div>
-        <Warning />
         <Header>
-          <div className='flex-auto'>
-            {type === 'richtext' ? null : (
-              <ViewMode mode={viewMode} onChange={onViewModeChange} />
-            )}
-          </div>
           <div className='mr2'>
             <Status status={status} />
           </div>
