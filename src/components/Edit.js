@@ -2,17 +2,13 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import config from '../config'
-import { convert as convertMarkdown } from '../lib/markdown'
 import bindEditor from '../lib/bind-editor'
 import mergeAliases from '../lib/merge-aliases'
-import takeSnapshot from '../lib/take-snapshot'
 
 import Header from './header/Header'
 import { NewButton, PeersButton, NotificationsButton } from './header/buttons'
 import EditorArea from './EditorArea'
 import Status from './Status'
-import DocViewer from './DocViewer'
-import { toSnapshotUrl } from './SnapshotLink'
 
 const debugScope = 'peer-star:collaboration:*'
 
@@ -32,7 +28,6 @@ class Edit extends Component {
       canEdit: keys.split('-').length >= 2,
       encodedKeys: keys,
       viewMode: 'source',
-      snapshots: [],
       alias: window.localStorage.getItem('alias'),
       doc: null,
       isDebuggingEnabled: !!window.localStorage.getItem('debug')
@@ -41,7 +36,6 @@ class Edit extends Component {
     this.onViewModeChange = this.onViewModeChange.bind(this)
     this.onEditor = this.onEditor.bind(this)
     this.onEditorValueChange = this.onEditorValueChange.bind(this)
-    this.onTakeSnapshot = this.onTakeSnapshot.bind(this)
     this.onAliasChange = this.onAliasChange.bind(this)
     this.onDebuggingStart = this.onDebuggingStart.bind(this)
     this.onDebuggingStop = this.onDebuggingStop.bind(this)
@@ -72,60 +66,6 @@ class Edit extends Component {
 
   onEditorValueChange (documentText) {
     this.setState({ documentText })
-  }
-
-  async onTakeSnapshot () {
-    try {
-      const docScript = await (await window.fetch('static/js/viewer.bundle.js')).text()
-      const options = {
-        type: this.state.type,
-        docScript,
-        DocViewer
-      }
-      const keys = (await import('peer-star-app')).keys
-      const snapshot = await takeSnapshot(keys, this.state.doc, options)
-      snapshot.createdAt = new Date().toISOString()
-      this.setState(({ snapshots }) => ({ snapshots: [snapshot, ...snapshots] }))
-      this.prefetchSnapshot(snapshot)
-      this.storeSnapshot(snapshot)
-    } catch (err) {
-      console.error(err)
-      alert('Error taking snapshot: ' +  err.message)
-    }
-  }
-
-  loadSnapshots () {
-    const key = `${this.state.name}-snapshots`
-    const val = window.localStorage.getItem(key)
-    if (!val) return []
-    try {
-      return JSON.parse(val)
-    } catch (err) {
-      console.error('Failed to load snapshots for pad', key, err)
-      // bad data. clear out for a better future.
-      window.localStorage.removeItem(key)
-      return []
-    }
-  }
-
-  storeSnapshot (snapshot) {
-    const snapshots = this.loadSnapshots()
-    const key = `${this.state.name}-snapshots`
-    const val = JSON.stringify([snapshot, ...snapshots])
-    window.localStorage.setItem(key, val)
-  }
-
-  // Prefetch snapshot from gateway to makes it load faster when user clicks a snap shot link
-  async prefetchSnapshot (snapshot) {
-    const url = toSnapshotUrl(snapshot)
-    return window.fetch(url)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Gateway response was not ok')
-        }
-      }).catch((err) => {
-        console.log('Failed to pre-fetch snapshot', url, err)
-      })
   }
 
   async onAliasChange (alias) {
@@ -165,7 +105,6 @@ class Edit extends Component {
       status,
       canEdit,
       viewMode,
-      snapshots,
       alias,
       isDebuggingEnabled
     } = this.state
@@ -173,8 +112,6 @@ class Edit extends Component {
     const {
       onEditor,
       onEditorValueChange,
-      onViewModeChange,
-      onTakeSnapshot,
       onDebuggingStart,
       onDebuggingStop
     } = this
@@ -223,10 +160,7 @@ class Edit extends Component {
               viewMode={viewMode}
               onEditor={onEditor}
               onEditorValueChange={onEditorValueChange}
-              snapshots={snapshots}
-              onTakeSnapshot={onTakeSnapshot}
               docText={documentText}
-              convertMarkdown={(md) => convertMarkdown(md, type)}
               onDebuggingStart={onDebuggingStart}
               onDebuggingStop={onDebuggingStop}
               isDebuggingEnabled={isDebuggingEnabled}
@@ -295,10 +229,6 @@ class Edit extends Component {
     // if (this._editor) doc.bindEditor(this._editor)
 
     // Turn the doc title into a peer editable input.
-
-    // Pull snapshots array out of localStorage into state.
-    const snapshots = this.loadSnapshots()
-    this.setState({snapshots})
   }
 
   componentWillUnmount () {
@@ -313,15 +243,6 @@ class Edit extends Component {
     if (!this._editorBinding && this._editor) {
       this._editorBinding = bindEditor(this.state.doc, this._titleRef, this._editor, this.state.type)
     }
-
-    // if (this._editor && this.state.canEdit) {
-    //   switch (this.state.type) {
-    //     case 'richtext':
-    //       this._editor.enable()
-    //       this._editor.focus()
-    //       break
-    //   }
-    // }
   }
 }
 

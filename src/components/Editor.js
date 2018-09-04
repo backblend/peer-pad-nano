@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-// import Quill from 'quill'
-// import 'quill/dist/quill.bubble.css'
 import CodeMirror from 'codemirror'
 import 'codemirror/mode/markdown/markdown'
 import 'codemirror/lib/codemirror.css'
@@ -18,29 +16,21 @@ export default class Editor extends Component {
     let editor
 
     if (ref) {
-      // if (type === 'richtext') {
-      //   editor = new Quill(ref, {
-      //     theme: 'bubble'
-      //   })
+      // See: http://codemirror.net/doc/manual.html#config
+      editor = CodeMirror(ref, {
+        autofocus: true,
+        inputStyle: 'contenteditable',
+        lineNumbers: true,
+        value: '',
+        viewportMargin: Infinity,
+        lineWrapping: true,
+        mode: 'markdown',
+        readOnly: 'nocursor'
+      })
 
-      //   editor.disable()
-      // } else {
-        // See: http://codemirror.net/doc/manual.html#config
-        editor = CodeMirror(ref, {
-          autofocus: true,
-          inputStyle: 'contenteditable',
-          lineNumbers: true,
-          value: '',
-          viewportMargin: Infinity,
-          lineWrapping: true,
-          mode: 'markdown',
-          readOnly: 'nocursor'
-        })
-
-        editor.on('change', () => {
-          if (onChange) onChange(editor.getValue(), editor)
-        })
-      // }
+      editor.on('change', () => {
+        if (onChange) onChange(editor.getValue(), editor)
+      })
     }
 
     if (onEditor) onEditor(editor)
@@ -56,7 +46,7 @@ export default class Editor extends Component {
 }
 
 Editor.propTypes = {
-  type: PropTypes.oneOf(['richtext', 'markdown', 'math']),
+  type: PropTypes.oneOf(['markdown']),
   editable: PropTypes.bool,
   onEditor: PropTypes.func,
   onChange: PropTypes.func

@@ -70,8 +70,7 @@ module.exports = {
   devtool: shouldUseSourceMap ? 'source-map' : false,
   // In production, we only want to load the polyfills and the app code.
   entry: {
-    main: [require.resolve('./polyfills'), paths.appIndexJs],
-    viewer: paths.docViewer
+    main: [require.resolve('./polyfills'), paths.appIndexJs]
   },
   output: {
     // The build folder.
@@ -201,8 +200,7 @@ module.exports = {
         minifyJS: true,
         minifyCSS: true,
         minifyURLs: true,
-      },
-      excludeChunks: ['viewer'],
+      }
     }),
     // Makes some environment variables available to the JS code, for example:
     // if (process.env.NODE_ENV === 'production') { ... }. See `./env.js`.
