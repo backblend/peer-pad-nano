@@ -9,7 +9,6 @@ const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeM
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
-const createStyleRule = require('./createStyleRule');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
@@ -124,6 +123,10 @@ module.exports = {
               name: 'static/media/[name].[hash:8].[ext]',
             },
           },
+          {
+            test: /\.css$/,
+            use: [ 'style-loader', 'css-loader' ]
+          },
           // Process JS with Babel.
           {
             test: /\.(js|jsx)$/,
@@ -137,10 +140,6 @@ module.exports = {
               cacheDirectory: true,
             },
           },
-          createStyleRule({ env, test: /\.css$/ }),
-          createStyleRule({ env, modules: true, test: /\.css$/ }),
-          createStyleRule({ env, test: /\.styl$/ }),
-          createStyleRule({ env, modules: true, test: /\.styl$/ }),
           // "file" loader makes sure those assets get served by WebpackDevServer.
           // When you `import` an asset, you get its (virtual) filename.
           // In production, they would get copied to the `build` folder.

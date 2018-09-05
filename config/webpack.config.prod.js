@@ -8,7 +8,6 @@ const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
-const baseCreateStyleRule = require('./createStyleRule');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -42,19 +41,6 @@ const extractTextPluginOptions = shouldUseRelativeAssetPaths
   ? // Making sure that the publicPath goes back to to build folder.
     { publicPath: Array(cssFilename.split('/').length).join('../') }
   : {};
-
-const createStyleRule = ({ modules, test }) => {
-  const styleRule = baseCreateStyleRule({ modules, test, shouldUseSourceMap, env })
-
-  // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
-  const [fallback, ...use] = styleRule.use
-  styleRule.loader = ExtractTextPlugin.extract(
-    Object.assign({ fallback, use }, extractTextPluginOptions)
-  )
-  delete styleRule.use
-
-  return styleRule
-}
 
 // This is the production configuration.
 // It compiles slowly and is focused on producing a fast and minimal bundle.
@@ -140,6 +126,10 @@ module.exports = {
               name: 'static/media/[name].[hash:8].[ext]',
             },
           },
+          {
+            test: /\.css$/,
+            use: [ 'style-loader', 'css-loader' ]
+          },
           // Process JS with Babel.
           {
             test: /\.(js|jsx)$/,
@@ -150,10 +140,6 @@ module.exports = {
               compact: true,
             },
           },
-          createStyleRule({ test: /\.css$/ }),
-          createStyleRule({ test: /\.css$/, modules: true }),
-          createStyleRule({ test: /\.styl$/ }),
-          createStyleRule({ test: /\.styl$/, modules: true }),
           // "file" loader makes sure assets end up in the `build` folder.
           // When you `import` an asset, you get its filename.
           // This loader don't uses a "test" so it will catch all modules
