@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import config from '../config'
-import bindEditor from '../lib/bind-editor'
-import mergeAliases from '../lib/merge-aliases'
+import config from './config'
+import bindEditor from './lib/bind-editor'
+import mergeAliases from './lib/merge-aliases'
 
 import Peers from './Peers'
 import Editor from './Editor'
