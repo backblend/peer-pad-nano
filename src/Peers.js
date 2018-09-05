@@ -131,9 +131,8 @@ const PeerItem = ({ id, alias, last }) => {
     aliasElem = id
   }
   return (
-    <li className={`flex flex-row ${last ? '' : 'mb2'} pointer`}>
+    <li>
       <span
-        className='flex-auto f6'
         style={{
           overflow: 'hidden',
           textOverflow: 'ellipsis',

@@ -261,10 +261,6 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
   }
 }
 
-export default (doc, title, editor, type) => {
-  if (type === 'markdown' || type === 'math') {
-    return bindCodeMirror(doc, title, editor)
-  }
-
-  throw new Error('unsupported type ' + type)
+export default (doc, title, editor) => {
+  return bindCodeMirror(doc, title, editor)
 }

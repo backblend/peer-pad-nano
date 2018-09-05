@@ -14,11 +14,10 @@ class Edit extends Component {
   constructor (props) {
     super(props)
 
-    const { type, name, keys } = props.match.params
+    const { name, keys } = props
 
     this.state = {
       name: decodeURIComponent(name),
-      type: type,
       documentText: '',
       status: 'offline',
       room: {},
@@ -57,7 +56,7 @@ class Edit extends Component {
 
     // Bind new editor if not null and we have a document
     if (doc && nextEditor) {
-      this._editorBinding = bindEditor(doc, this._titleRef, nextEditor, this.state.type)
+      this._editorBinding = bindEditor(doc, this._titleRef, nextEditor)
     }
   }
 
@@ -199,7 +198,8 @@ class Edit extends Component {
   }
 }
 Edit.propTypes = {
-  type: PropTypes.object
+  name: PropTypes.string,
+  keys: PropTypes.string
 }
 
 export default Edit

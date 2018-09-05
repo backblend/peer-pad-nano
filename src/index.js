@@ -6,16 +6,10 @@ import CreateDocumentContainer from './CreateDocumentContainer'
 class App extends Component {
   render () {
     const { hash } = location
-    let match = hash.match(/^#\/w\/(markdown)\/([^/]+)\/([^/]+)$/)
+    let match = hash.match(/^#\/w\/markdown\/([^/]+)\/([^/]+)$/)
     if (match) {
-      match = {
-        params: {
-          type: match[1],
-          name: match[2],
-          keys: match[3]
-        }
-      }
-      return <Edit match={match} />
+      const [_, name, keys] = match
+      return <Edit name={name} keys={keys} />
     } else {
       return (
         <div>
