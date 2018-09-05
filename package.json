@@ -4,7 +4,8 @@
   "private": true,
   "leadMaintainer": "Jim Pick (@jimpick)",
   "scripts": {
-    "start": "node scripts/start.js"
+    "start": "node scripts/start.js",
+    "build": "node scripts/build.js"
   },
   "dependencies": {
     "autoprefixer": "7.1.2",
@@ -48,15 +49,12 @@
     "style-loader": "0.18.2",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
-    "sw-precache-webpack-plugin": "0.11.4",
     "tachyons": "^4.8.1",
     "tachyons-flexbox": "^2.0.5",
     "tachyons-forms": "^3.1.3",
-    "uglifyjs-webpack-plugin": "^1.2.5",
     "url-loader": "0.5.9",
     "webpack": "3.5.1",
     "webpack-dev-server": "2.7.1",
-    "webpack-manifest-plugin": "1.2.1",
     "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
