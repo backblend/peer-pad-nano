@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import StartButton from './StartButton'
+import CreateDocumentContainer from './CreateDocumentContainer'
 
 class Home extends Component {
   constructor (props) {
@@ -13,7 +13,9 @@ class Home extends Component {
     return (
       <div>
         <h1>PeerPad Mini</h1>
-        <StartButton />
+        <CreateDocumentContainer children={({onCreateDocument}) => (
+          <button onClick={onCreateDocument}>START</button>
+        )} />
       </div>
     )
   }

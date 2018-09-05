@@ -5,7 +5,7 @@ import config from '../config'
 import bindEditor from '../lib/bind-editor'
 import mergeAliases from '../lib/merge-aliases'
 
-import PeersButton from './header/buttons/PeersButton'
+import Peers from './Peers'
 import Editor from './Editor'
 import { Link } from 'react-router-dom'
 
@@ -110,7 +110,7 @@ class Edit extends Component {
       <div>
         <Link to='/' data-id='home-link'>PeerPad Nano Home</Link>
         <div>Status: {status}</div>
-        <PeersButton doc={this.state.doc} alias={alias} onAliasChange={this.onAliasChange} canEdit={this.state.canEdit} />
+        <Peers doc={this.state.doc} alias={alias} onAliasChange={this.onAliasChange} canEdit={this.state.canEdit} />
         <div className='ph3'>
           <div className='mw8 center'>
             <div className='mb4 pb3 bb b--pigeon-post'>

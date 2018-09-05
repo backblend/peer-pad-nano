@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import { HashRouter as Router, Route } from 'react-router-dom'
 
-import Home from './home/Home'
+import Home from './Home'
 import Edit from './Edit'
 
 class App extends Component {

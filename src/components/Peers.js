@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import peerColor from '../../../lib/peer-color'
-import mergeAliases from '../../../lib/merge-aliases'
+import peerColor from '../lib/peer-color'
+import mergeAliases from '../lib/merge-aliases'
 
 export default class PeersButton extends Component {
   constructor (props) {
