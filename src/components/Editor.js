@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import CodeMirror from 'codemirror'
 import 'codemirror/mode/markdown/markdown'
 import 'codemirror/lib/codemirror.css'
-import styles from './Codemirror.module.styl'
 
 export default class Editor extends Component {
   constructor (props) {
@@ -37,11 +36,7 @@ export default class Editor extends Component {
   }
 
   render () {
-    return (
-      <div className={styles.CodeMirrorContainer}>
-        <div ref={this.onRef} />
-      </div>
-    )
+    return <div ref={this.onRef} />
   }
 }
 

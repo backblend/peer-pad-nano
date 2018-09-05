@@ -5,10 +5,9 @@ import config from '../config'
 import bindEditor from '../lib/bind-editor'
 import mergeAliases from '../lib/merge-aliases'
 
-import Header from './header/Header'
 import PeersButton from './header/buttons/PeersButton'
-import EditorArea from './EditorArea'
-import Status from './Status'
+import Editor from './Editor'
+import { Link } from 'react-router-dom'
 
 const debugScope = 'peer-star:collaboration:*'
 
@@ -96,32 +95,22 @@ class Edit extends Component {
 
   render () {
     const {
-      name,
       type,
-      // The editor contents is updated directly by peer-pad-core.
-      // `documentText` is a cache of the last value we received.
-      documentText,
-      encodedKeys,
       status,
       canEdit,
-      viewMode,
-      alias,
-      isDebuggingEnabled
+      alias
     } = this.state
 
     const {
       onEditor,
-      onEditorValueChange,
-      onDebuggingStart,
-      onDebuggingStop
+      onEditorValueChange
     } = this
 
     return (
       <div>
-        <Header>
-          <Status status={status} />
-          <PeersButton doc={this.state.doc} alias={alias} onAliasChange={this.onAliasChange} canEdit={this.state.canEdit} />
-        </Header>
+        <Link to='/' data-id='home-link'>PeerPad Nano Home</Link>
+        <div>Status: {status}</div>
+        <PeersButton doc={this.state.doc} alias={alias} onAliasChange={this.onAliasChange} canEdit={this.state.canEdit} />
         <div className='ph3'>
           <div className='mw8 center'>
             <div className='mb4 pb3 bb b--pigeon-post'>
@@ -141,17 +130,10 @@ class Edit extends Component {
                 </div>
               </div>
             </div>
-            <EditorArea
-              docName={name}
+            <Editor
               docType={type}
-              encodedKeys={encodedKeys}
-              viewMode={viewMode}
               onEditor={onEditor}
               onEditorValueChange={onEditorValueChange}
-              docText={documentText}
-              onDebuggingStart={onDebuggingStart}
-              onDebuggingStop={onDebuggingStop}
-              isDebuggingEnabled={isDebuggingEnabled}
               />
           </div>
         </div>
