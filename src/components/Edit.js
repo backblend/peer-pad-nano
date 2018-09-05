@@ -7,7 +7,6 @@ import mergeAliases from '../lib/merge-aliases'
 
 import Peers from './Peers'
 import Editor from './Editor'
-import { Link } from 'react-router-dom'
 
 const debugScope = 'peer-star:collaboration:*'
 
@@ -108,35 +107,21 @@ class Edit extends Component {
 
     return (
       <div>
-        <Link to='/' data-id='home-link'>PeerPad Nano Home</Link>
+        <a href='/'>PeerPad Nano Home</a>
         <div>Status: {status}</div>
         <Peers doc={this.state.doc} alias={alias} onAliasChange={this.onAliasChange} canEdit={this.state.canEdit} />
-        <div className='ph3'>
-          <div className='mw8 center'>
-            <div className='mb4 pb3 bb b--pigeon-post'>
-              <div className='flex flex-row items-center'>
-                <div className='flex-auto'>
-                  <input
-                    ref={(ref) => { this._titleRef = ref }}
-                    type='text'
-                    className='input-reset sans-serif bw0 f4 blue-bayox w-100 pa0'
-                    placeholder='Document Title'
-                    readOnly={!canEdit}
-                    data-id='document-title-input'
-                   />
-                </div>
-                <div className='dn f7 pigeon-post'>
-                  <b className='fw5'>Last change:</b> today, 12:00AM
-                </div>
-              </div>
-            </div>
-            <Editor
-              docType={type}
-              onEditor={onEditor}
-              onEditorValueChange={onEditorValueChange}
-              />
-          </div>
-        </div>
+        <input
+          ref={(ref) => { this._titleRef = ref }}
+          type='text'
+          placeholder='Document Title'
+          readOnly={!canEdit}
+          data-id='document-title-input'
+          />
+        <Editor
+          docType={type}
+          onEditor={onEditor}
+          onEditorValueChange={onEditorValueChange}
+          />
       </div>
     )
   }
