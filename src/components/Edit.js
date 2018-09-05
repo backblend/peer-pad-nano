@@ -6,7 +6,7 @@ import bindEditor from '../lib/bind-editor'
 import mergeAliases from '../lib/merge-aliases'
 
 import Header from './header/Header'
-import { NewButton, PeersButton, NotificationsButton } from './header/buttons'
+import PeersButton from './header/buttons/PeersButton'
 import EditorArea from './EditorArea'
 import Status from './Status'
 
@@ -119,20 +119,8 @@ class Edit extends Component {
     return (
       <div>
         <Header>
-          <div className='mr2'>
-            <Status status={status} />
-          </div>
-          <div>
-            <span className='mr2'>
-              <NewButton />
-            </span>
-            <span className='mr0'>
-              <PeersButton doc={this.state.doc} alias={alias} onAliasChange={this.onAliasChange} canEdit={this.state.canEdit} />
-            </span>
-            <span>
-              <NotificationsButton />
-            </span>
-          </div>
+          <Status status={status} />
+          <PeersButton doc={this.state.doc} alias={alias} onAliasChange={this.onAliasChange} canEdit={this.state.canEdit} />
         </Header>
         <div className='ph3'>
           <div className='mw8 center'>
