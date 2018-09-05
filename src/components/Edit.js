@@ -14,7 +14,6 @@ class Edit extends Component {
   constructor (props) {
     super(props)
 
-    this._backend = props.backend
     const { type, name, keys } = props.match.params
 
     this.state = {
@@ -144,7 +143,6 @@ class Edit extends Component {
         window.alert(err.message)
       })
       await this._backend.start()
-      this.props.onBackend(this._backend)
     }
 
     const keys = await PeerStar.keys.uriDecode(this.state.encodedKeys)
@@ -202,8 +200,6 @@ class Edit extends Component {
 }
 
 Edit.propTypes = {
-  backend: PropTypes.object,
-  onBackend: PropTypes.func
 }
 
 export default Edit

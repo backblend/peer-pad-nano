@@ -18,12 +18,9 @@ class App extends Component {
   }
 
   renderEditor (props) {
-    return (<Edit backend={this._backend} onBackend={this.onBackend.bind(this)} {...props} />)
+    return (<Edit {...props} />)
   }
 
-  onBackend (backend) {
-    this._backend = backend
-  }
 }
 
 export default App
