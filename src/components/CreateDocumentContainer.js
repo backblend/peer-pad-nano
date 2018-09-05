@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Redirect } from 'react-router-dom'
 
 /*
  * "Children as fn" style container, to create and redirect to a new docuement.
@@ -21,7 +20,8 @@ export default class CreateDocumentContainer extends Component {
     if (this.state.redirect) {
       const redir = this.state.redirect
       this.setState({ redirect: null })
-      return (<Redirect to={redir} push />)
+      location.hash = redir
+      location.reload()
     }
 
     return this.props.children({

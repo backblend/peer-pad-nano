@@ -1,26 +1,26 @@
 import React, { Component } from 'react'
 
-import { HashRouter as Router, Route } from 'react-router-dom'
-
 import Home from './Home'
 import Edit from './Edit'
 
 class App extends Component {
   render () {
-    return (
-      <Router>
-        <div>
-          <Route exact path='/' component={Home} />
-          <Route exact path='/w/:type/:name/:keys' render={this.renderEditor.bind(this)} />
-        </div>
-      </Router>
-    )
+    const { hash } = location
+    let match = hash.match(/^#\/w\/(markdown)\/([^/]+)\/([^/]+)$/)
+    if (match) {
+      match = {
+        params: {
+          type: match[1],
+          name: match[2],
+          keys: match[3]
+        }
+      }
+      return <Edit match={match} />
+      // return <pre>{JSON.stringify(match)}</pre>
+    } else {
+      return <Home />
+    }
   }
-
-  renderEditor (props) {
-    return (<Edit {...props} />)
-  }
-
 }
 
 export default App

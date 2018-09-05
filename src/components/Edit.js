@@ -198,8 +198,8 @@ class Edit extends Component {
     }
   }
 }
-
 Edit.propTypes = {
+  type: PropTypes.object
 }
 
 export default Edit
