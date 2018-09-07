@@ -36,7 +36,7 @@ export default class Editor extends Component {
   }
 
   render () {
-    return <div ref={this.onRef} />
+    return <div ref={this.onRef} className="editor"/>
   }
 }
 

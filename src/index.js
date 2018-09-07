@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import Edit from './Edit'
 import CreateDocumentContainer from './CreateDocumentContainer'
+import './index.css'
 
 class App extends Component {
   render () {

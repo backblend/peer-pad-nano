@@ -5,6 +5,7 @@
   "leadMaintainer": "Jim Pick (@jimpick)",
   "scripts": {
     "start": "node scripts/start.js",
+    "start:rv": "rendezvous",
     "build": "node scripts/build.js"
   },
   "dependencies": {
@@ -27,6 +28,7 @@
     "html-webpack-plugin": "2.29.0",
     "libp2p-crypto": "^0.13.0",
     "lodash.debounce": "^4.0.8",
+    "lodash.throttle": "^4.1.1",
     "milliseconds": "^1.0.3",
     "peer-star-app": "^0.5.9",
     "pify": "^3.0.0",
@@ -41,6 +43,7 @@
   "devDependencies": {
     "http-server": "^0.11.1",
     "identity-obj-proxy": "^3.0.0",
+    "libp2p-websocket-star-rendezvous": "^0.2.3",
     "npm-run-all": "^4.1.2"
   },
   "babel": {
