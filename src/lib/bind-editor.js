@@ -7,11 +7,11 @@ const THROTTLE_CURSOR_ACTIVITY_MS = 100
 
 const bindCodeMirror = (doc, titleEditor, editor) => {
   const thisPeerId = doc.app.ipfs._peerInfo.id.toB58String()
-  let cursorGossip
-  let titleCollab
+  // let cursorGossip
+  // let titleCollab
   let initialised = false
   let locked = false
-  let markers = new Map()
+  // let markers = new Map()
   let queue = functionQueue()
 
   const applyDiffs = (pos, diffs) => {
@@ -84,7 +84,7 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
               cursorPos -= text.length
             }
 
-            moveMarkersIfAfter(pos, -text.length)
+            // moveMarkersIfAfter(pos, -text.length)
           }
         } else { // INSERT
           if (text.length) {
@@ -95,7 +95,7 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
             if (pos < cursorPos) {
               cursorPos += text.length
             }
-            moveMarkersIfAfter(pos, text.length)
+            // moveMarkersIfAfter(pos, text.length)
           }
         }
       })
@@ -170,6 +170,7 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
   titleEditor.addEventListener('input', onTitleEditorChanged)
   */
 
+  /*
   const onCursorGossipMessage = (cursor, fromPeerId) => {
     if (fromPeerId === thisPeerId) {
       return
@@ -211,6 +212,7 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
 
   const onEditorCursorActivityThrottled = throttle(onEditorCursorActivity, THROTTLE_CURSOR_ACTIVITY_MS)
   editor.on('cursorActivity', onEditorCursorActivityThrottled)
+  */
 
   initialised = true
 
@@ -224,12 +226,15 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
       titleCollab.removeListener('state changed', onTitleStateChanged)
     }
     */
+    /*
     editor.off('cursorActivity', onEditorCursorActivityThrottled)
     if (cursorGossip) {
       cursorGossip.removeListener('message', onCursorGossipMessage)
     }
+    */
   }
 
+  /*
   function getCursorWidget (cursorPos, color) {
     const cursorCoords = editor.cursorCoords(cursorPos)
     const cursorElement = document.createElement('span')
@@ -265,6 +270,7 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
 
     markers.delete(peer)
   }
+  */
 }
 
 export default (doc, title, editor) => {
