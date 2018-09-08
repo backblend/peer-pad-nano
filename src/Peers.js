@@ -1,28 +1,30 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import peerColor from './lib/peer-color'
-import mergeAliases from './lib/merge-aliases'
+// import mergeAliases from './lib/merge-aliases'
 
-export default class PeersButton extends Component {
+export default class Peers extends Component {
   constructor (props) {
     super(props)
 
     const initialState = {
       peers: (props.doc && props.doc.peers()) || {},
       dropdownOpen: false,
-      alias: props.alias || ''
+      // alias: props.alias || ''
     }
 
     this.state = initialState
 
     this.onPeersChange = this.onPeersChange.bind(this)
+    /*
     this.onAliasChange = this.onAliasChange.bind(this)
     this.onSaveAlias = this.onSaveAlias.bind(this)
     this.onAliasesStateChanged = this.onAliasesStateChanged.bind(this)
+    */
 
     if (props.doc) {
       props.doc.on('membership changed', this.onPeersChange)
-      this.bindAliases()
+      // this.bindAliases()
     }
   }
 
@@ -30,10 +32,10 @@ export default class PeersButton extends Component {
     // Remove listener if receiving new peers object
     if (nextProps.doc && this.props.doc) {
       this.props.doc.removeListener('membership changed', this.onPeersChange)
-      await this.unbindAliases()
+      // await this.unbindAliases()
       nextProps.doc.on('membership changed', this.onPeersChange)
       this.setState({ peers: nextProps.doc.peers() })
-      this.bindAliases(nextProps.doc)
+      // this.bindAliases(nextProps.doc)
     }
   }
 
@@ -47,6 +49,7 @@ export default class PeersButton extends Component {
     this.setState({ peers: this.props.doc.peers() })
   }
 
+  /*
   onAliasesStateChanged () {
     this.props.doc.sub('aliases', 'mvreg')
       .then((aliasesCollab) => {
@@ -86,11 +89,14 @@ export default class PeersButton extends Component {
     const { alias } = this.state
     this.props.onAliasChange(alias)
   }
+  */
 
   render () {
-    const { peers, alias } = this.state
+    // const { peers, alias } = this.state
+    const { peers } = this.state
     const peerIds = Array.from(peers).sort()
     const count = peerIds.length - 1
+    //            alias={(this.state.aliases && this.state.aliases[id]) || ''}
     return (
       <div className='pa3'>
         {count >= 0 ? (
@@ -99,7 +105,6 @@ export default class PeersButton extends Component {
               <PeerItem
                 key={id}
                 id={id}
-                alias={(this.state.aliases && this.state.aliases[id]) || ''}
                 last={i === count - 1} />
             ))}
           </ul>
@@ -107,22 +112,24 @@ export default class PeersButton extends Component {
           <p className='f6 ma0'>No other peers</p>
         )}
         {
+          /*
           this.props.canEdit ? (
             <div className='f6 ma0 pa0'>
-              <input type='text' className='bn-m dib w-60 ph1 pv1 mr1' value={alias} placeholder='Your name' onChange={this.onAliasChange} />
-              <button type='button' className='button-reset dib w-30 pa0 ma0 white-lilac bg-bright-turquoise hover--white ba b--bright-turquoise ph2 pv1 bw0 ttu pointer br1' onClick={this.onSaveAlias}>SET</button>
+              <input type='text' value={alias} placeholder='Your name' onChange={this.onAliasChange} />
+              <button type='button' onClick={this.onSaveAlias}>SET</button>
             </div>
           ) : null
+          */
         }
       </div>
     )
   }
 }
 
-PeersButton.propTypes = {
+Peers.propTypes = {
   doc: PropTypes.object,
-  alias: PropTypes.string,
-  onAliasChange: PropTypes.func
+  // alias: PropTypes.string,
+  // onAliasChange: PropTypes.func
 }
 
 const PeerItem = ({ id, alias, last }) => {

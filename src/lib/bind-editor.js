@@ -1,9 +1,9 @@
 import Diff from 'fast-diff'
-import debounce from 'lodash.debounce'
+import throttle from 'lodash.throttle'
 import peerColor from './peer-color'
 import functionQueue from './fn-queue'
 
-const DEBOUNCE_CUSOR_ACTIVITY_MS = 2000
+const THROTTLE_CURSOR_ACTIVITY_MS = 100
 
 const bindCodeMirror = (doc, titleEditor, editor) => {
   const thisPeerId = doc.app.ipfs._peerInfo.id.toB58String()
@@ -35,7 +35,7 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
     })
   }
 
-  const onCodeMirrorChange = debounce((editor) => {
+  const onCodeMirrorChange = (editor) => {
     queue.push(() => {
       if (!initialised || locked) {
         return
@@ -43,11 +43,13 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
       const diffs = Diff(doc.shared.value().join(''), editor.getValue())
       applyDiffs(0, diffs)
     })
-  })
+  }
 
-  editor.on('change', debounce(onCodeMirrorChange, 1000))
+  editor.on('change', throttle(onCodeMirrorChange, 100))
+  // editor.on('change', onCodeMirrorChange)
 
   const onStateChanged = (fromSelf) => {
+    console.log('Jim onStateChanged', fromSelf, doc.shared)
     if (fromSelf) {
       return
     }
@@ -114,6 +116,7 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
 
   editor.setValue(doc.shared.value().join(''))
 
+  /*
   const onTitleStateChanged = () => {
     const oldTitle = titleEditor.value
     const newTitle = titleCollab.shared.value().join('')
@@ -165,6 +168,7 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
   }
 
   titleEditor.addEventListener('input', onTitleEditorChanged)
+  */
 
   const onCursorGossipMessage = (cursor, fromPeerId) => {
     if (fromPeerId === thisPeerId) {
@@ -205,8 +209,8 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
     }
   }
 
-  const onEditorCursorActivityDebounced = debounce(onEditorCursorActivity, DEBOUNCE_CUSOR_ACTIVITY_MS)
-  editor.on('cursorActivity', onEditorCursorActivityDebounced)
+  const onEditorCursorActivityThrottled = throttle(onEditorCursorActivity, THROTTLE_CURSOR_ACTIVITY_MS)
+  editor.on('cursorActivity', onEditorCursorActivityThrottled)
 
   initialised = true
 
@@ -214,11 +218,13 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
     // unbind
     doc.removeListener('state changed', onStateChanged)
     editor.off('change', onCodeMirrorChange)
+    /*
     titleEditor.removeEventListener('input', onTitleEditorChanged)
     if (titleCollab) {
       titleCollab.removeListener('state changed', onTitleStateChanged)
     }
-    editor.off('cursorActivity', onEditorCursorActivityDebounced)
+    */
+    editor.off('cursorActivity', onEditorCursorActivityThrottled)
     if (cursorGossip) {
       cursorGossip.removeListener('message', onCursorGossipMessage)
     }

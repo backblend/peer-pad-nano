@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import config from './config'
 import bindEditor from './lib/bind-editor'
-import mergeAliases from './lib/merge-aliases'
+// import mergeAliases from './lib/merge-aliases'
 
 import Peers from './Peers'
 import Editor from './Editor'
@@ -24,7 +24,7 @@ class Edit extends Component {
       canEdit: keys.split('-').length >= 2,
       encodedKeys: keys,
       viewMode: 'source',
-      alias: window.localStorage.getItem('alias'),
+      // alias: window.localStorage.getItem('alias'),
       doc: null,
       isDebuggingEnabled: !!window.localStorage.getItem('debug')
     }
@@ -32,7 +32,7 @@ class Edit extends Component {
     this.onViewModeChange = this.onViewModeChange.bind(this)
     this.onEditor = this.onEditor.bind(this)
     this.onEditorValueChange = this.onEditorValueChange.bind(this)
-    this.onAliasChange = this.onAliasChange.bind(this)
+    // this.onAliasChange = this.onAliasChange.bind(this)
     this.onDebuggingStart = this.onDebuggingStart.bind(this)
     this.onDebuggingStop = this.onDebuggingStop.bind(this)
   }
@@ -64,6 +64,7 @@ class Edit extends Component {
     this.setState({ documentText })
   }
 
+  /*
   async onAliasChange (alias) {
     this.setState({ alias })
     const doc = this.state.doc
@@ -75,6 +76,7 @@ class Edit extends Component {
     aliases[myPeerId] = alias
     aliasesCollab.shared.write(aliases)
   }
+  */
 
   async onDebuggingStart () {
     (await import('peer-star-app')).debug.enable(debugScope)
@@ -95,7 +97,7 @@ class Edit extends Component {
       type,
       status,
       canEdit,
-      alias
+      // alias
     } = this.state
 
     const {
@@ -103,17 +105,19 @@ class Edit extends Component {
       onEditorValueChange
     } = this
 
+    // <Peers doc={this.state.doc} alias={alias} onAliasChange={this.onAliasChange} canEdit={this.state.canEdit} />
     return (
       <div className="doc">
         <a href='/'>PeerPad Nano Home</a>
         <div>Status: {status}</div>
-        <Peers doc={this.state.doc} alias={alias} onAliasChange={this.onAliasChange} canEdit={this.state.canEdit} />
+        <Peers doc={this.state.doc} canEdit={this.state.canEdit} />
         <input
           ref={(ref) => { this._titleRef = ref }}
           type='text'
           placeholder='Document Title'
           readOnly={!canEdit}
           data-id='document-title-input'
+          hidden
           />
         <Editor
           docType={type}
