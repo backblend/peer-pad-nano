@@ -79,14 +79,14 @@ class Edit extends Component {
   */
 
   async onDebuggingStart () {
-    (await import('peer-star-app')).debug.enable(debugScope)
+    (await import('@jimpick/peer-star-app')).debug.enable(debugScope)
     localStorage.setItem('debug', debugScope)
     console.log('debugging started')
     this.setState({isDebuggingEnabled: true})
   }
 
   async onDebuggingStop () {
-    (await import('peer-star-app')).debug.disable()
+    (await import('@jimpick/peer-star-app')).debug.disable()
     localStorage.setItem('debug', '')
     console.log('debugging stopped')
     this.setState({isDebuggingEnabled: false})
@@ -137,7 +137,7 @@ class Edit extends Component {
   }
 
   async componentDidMount () {
-    const PeerStar = await import('peer-star-app')
+    const PeerStar = await import('@jimpick/peer-star-app')
 
     if (!this._backend) {
       this._backend = PeerStar('peer-pad/2', config.peerStar)

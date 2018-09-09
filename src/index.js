@@ -14,7 +14,7 @@ class App extends Component {
     } else {
       return (
         <div>
-          <h1>PeerPad Mini</h1>
+          <h1>PeerPad Nano</h1>
           <CreateDocumentContainer children={({onCreateDocument}) => (
             <button onClick={onCreateDocument}>START</button>
           )} />

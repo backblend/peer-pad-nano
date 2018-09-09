@@ -42,9 +42,9 @@ export default class CreateDocumentContainer extends Component {
 
   async onCreateDocument () {
     try {
-      const generateRandomKeys = await import('peer-star-app/src/keys/generate')
-      const generateRandomName = await import('peer-star-app/src/keys/generate-random-name')
-      const uriEncodeKey = await import('peer-star-app/src/keys/uri-encode')
+      const generateRandomKeys = await import('@jimpick/peer-star-app/src/keys/generate')
+      const generateRandomName = await import('@jimpick/peer-star-app/src/keys/generate-random-name')
+      const uriEncodeKey = await import('@jimpick/peer-star-app/src/keys/uri-encode')
       const type = encodeURIComponent(this.state.type || 'markdown')
       const name = encodeURIComponent(this.state.name || generateRandomName())
       const keys = await generateRandomKeys()

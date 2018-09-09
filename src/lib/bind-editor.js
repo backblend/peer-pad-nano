@@ -11,8 +11,10 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
   // let titleCollab
   let initialised = false
   let locked = false
+  let pending = false
   // let markers = new Map()
   let queue = functionQueue()
+  let editorText
 
   const applyDiffs = (pos, diffs) => {
     diffs.forEach((d) => {
@@ -22,26 +24,36 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
       } else if (op === -1) { // DELETE
         for (let i = text.length - 1; i >= 0; i--) {
           try {
+            // console.log('Jim delete', pos + i)
             doc.shared.removeAt(pos + i)
+            pending = true
           } catch (err) {
             console.error(err)
             onStateChanged()
           }
         }
       } else { // INSERT
+        // console.log('Jim insert', pos, text)
         doc.shared.insertAllAt(pos, text.split(''))
+        // console.log('Jim3', doc.shared.value().join(''))
+        pending = true
         pos += text.length
       }
     })
   }
 
   const onCodeMirrorChange = (editor) => {
+    // console.log('Jim onCodeMirrorChanged')
     queue.push(() => {
-      if (!initialised || locked) {
+      if (!initialised || locked || pending) {
+        // console.log('Jim blocked', !initialised, locked, pending)
         return
       }
-      const diffs = Diff(doc.shared.value().join(''), editor.getValue())
+      editorText = editor.getValue()
+      if (!editorText) return
+      const diffs = Diff(doc.shared.value().join(''), editorText)
       applyDiffs(0, diffs)
+      // console.log('Jim2', doc.shared.value().join(''))
     })
   }
 
@@ -49,15 +61,20 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
   // editor.on('change', onCodeMirrorChange)
 
   const onStateChanged = (fromSelf) => {
-    console.log('Jim onStateChanged', fromSelf, doc.shared)
+    // console.log('Jim onStateChanged', fromSelf)
+    // return
     if (fromSelf) {
+      pending = false
       return
     }
+    // console.log('Jim onStateChanged 2')
     queue.push(() => {
-      let oldText = editor.getValue()
+      // let oldText = editor.getValue()
+      let oldText = editorText
       let newText = doc.shared.value().join('')
 
-      if (oldText === newText) {
+      if (!oldText || !newText || oldText === newText) {
+        pending = false
         return
       }
 
@@ -67,6 +84,8 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
       let cursorPos = editor.indexFromPos(cursor)
 
       const diffs = Diff(oldText, newText)
+      // console.error('Jim onStateChanged diffs:')
+      // diffs.forEach(diff => { console.log('  ', diff) })
       let pos = 0
       diffs.forEach((d) => {
         const [op, text] = d
@@ -101,14 +120,21 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
       })
       editor.setCursor(editor.posFromIndex(cursorPos))
 
-      oldText = editor.getValue()
+      /*
+      editorText = editor.getValue()
+      oldText = editorText
       newText = doc.shared.value().join('')
+      */
 
       locked = false
+      pending = false
+      onCodeMirrorChange(editor)
 
+      /*
       if (oldText !== newText) {
         onStateChanged()
       }
+      */
     })
   }
 
