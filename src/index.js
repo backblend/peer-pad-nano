@@ -5,8 +5,21 @@ import CreateDocumentContainer from './CreateDocumentContainer'
 import './index.css'
 
 class App extends Component {
+  constructor (props) {
+    super(props)
+    this.state = { hash: location.hash }
+    this.setHash = this.setHash.bind(this)
+  }
+  componentDidMount () {
+    window.addEventListener('hashchange', this.setHash, false)
+  }
+
+  setHash () {
+    this.setState({hash: location.hash})
+  }
+
   render () {
-    const { hash } = location
+    const { hash } = this.state
     let match = hash.match(/^#\/w\/markdown\/([^/]+)\/([^/]+)$/)
     if (match) {
       const [_, name, keys] = match

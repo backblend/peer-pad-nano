@@ -108,7 +108,7 @@ class Edit extends Component {
     // <Peers doc={this.state.doc} alias={alias} onAliasChange={this.onAliasChange} canEdit={this.state.canEdit} />
     return (
       <div className="doc">
-        <a href='/'>PeerPad Nano Home</a>
+        <a href='#'>PeerPad Nano Home</a>
         <div>Status: {status}</div>
         <Peers doc={this.state.doc} canEdit={this.state.canEdit} />
         <input
