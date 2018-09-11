@@ -5,7 +5,7 @@
   "leadMaintainer": "Jim Pick (@jimpick)",
   "scripts": {
     "start": "node scripts/start.js",
-    "start:rv": "rendezvous",
+    "start:rv": "rendezvous -p 9190",
     "build": "node scripts/build.js"
   },
   "dependencies": {
