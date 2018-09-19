@@ -83,7 +83,8 @@ class Edit extends Component {
       type,
       status,
       canEdit,
-      ipfsId
+      ipfsId,
+      localClock
     } = this.state
 
     const {
@@ -98,7 +99,7 @@ class Edit extends Component {
           <span>Collaboration: {doc ? prettyHash(doc.name) : 'Loading'}</span>
           <span>Status: {status}</span>
         </div>
-        <Peers doc={doc} ipfsId={ipfsId} />
+        <Peers doc={doc} ipfsId={ipfsId} localClock={localClock} />
         <input
           ref={(ref) => { this._titleRef = ref }}
           type='text'
@@ -150,6 +151,13 @@ class Edit extends Component {
 
     this.setState({ doc })
 
+    this.clockIntervalId = setInterval(() => {
+      if (doc && doc._clocks && this.state.ipfsId) {
+        const localClock = doc._clocks._clocks.get(this.state.ipfsId)
+        this.setState({ localClock })
+      }
+    }, 1000)
+
     doc.on('error', (err) => {
       console.log(err)
       window.alert(err.message)
@@ -180,6 +188,9 @@ class Edit extends Component {
   componentWillUnmount () {
     if (this.state.doc) {
       this.state.doc.stop()
+    }
+    if (this.clockIntervalId) {
+      clearInterval(this.clockIntervalId)
     }
 
     this._editor = null

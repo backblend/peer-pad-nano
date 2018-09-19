@@ -42,35 +42,29 @@ export default class Peers extends Component {
 
   render () {
     const { peers } = this.state
-    const { ipfsId } = this.props
-    const peerIds = Array.from(peers).sort()
-    const count = peerIds.length - 1
+    const { ipfsId, localClock } = this.props
+
+    if (!ipfsId) return <p>No peers</p>
+    const peerIds = Array
+      .from(peers)
+      .filter((id) => id !== ipfsId)
+      .sort()
     return (
       <div className="peers">
-        {count >= 0 ? (
-          <ul>
-            {peerIds.map((id) => {
-              if (id === ipfsId) {
-                // List self first in list
-                return (<PeerItem
-                  key={id}
-                  id={id}
-                />)
-              }
-            })}
-            {peerIds.map((id) => {
-              if (id !== ipfsId) {
-                // List all others
-                return (<PeerItem
-                  key={id}
-                  id={id}
-                />)
-              }
-            })}
-          </ul>
-        ) : (
-          <p>No peers</p>
-        )}
+        <ul>
+          <PeerItem
+            key={ipfsId}
+            id={ipfsId}
+            clock={localClock && localClock[ipfsId]}
+          />
+          {peerIds.map((id) => (
+            <PeerItem
+              key={id}
+              id={id}
+              clock={localClock && localClock[id]}
+            />
+          ))}
+        </ul>
       </div>
     )
   }
@@ -78,15 +72,17 @@ export default class Peers extends Component {
 
 Peers.propTypes = {
   doc: PropTypes.object,
-  ipfsId: PropTypes.string
+  ipfsId: PropTypes.string,
+  localClock: PropTypes.object
 }
 
-const PeerItem = ({ id }) => {
+const PeerItem = ({ id, clock }) => {
   return (
     <li>
       <span style={{borderBottom: `3px solid ${peerColor(id)}`}}>
         {id.slice(id.length - 3)}
       </span>
+      {clock}
     </li>
   )
 }
