@@ -70,10 +70,10 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
     // console.log('Jim onStateChanged 2')
     queue.push(() => {
       // let oldText = editor.getValue()
-      let oldText = editorText
+      let oldText = editorText || ''
       let newText = doc.shared.value().join('')
 
-      if (!oldText || !newText || oldText === newText) {
+      if (oldText === newText) {
         pending = false
         return
       }

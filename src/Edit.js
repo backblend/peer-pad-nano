@@ -156,7 +156,7 @@ class Edit extends Component {
         const localClock = doc._clocks._clocks.get(this.state.ipfsId)
         this.setState({ localClock })
       }
-    }, 1000)
+    }, 250)
 
     doc.on('error', (err) => {
       console.log(err)
