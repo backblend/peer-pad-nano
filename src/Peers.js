@@ -9,22 +9,15 @@ export default class Peers extends Component {
 
     const initialState = {
       peers: (props.doc && props.doc.peers()) || {},
-      dropdownOpen: false,
-      // alias: props.alias || ''
+      dropdownOpen: false
     }
 
     this.state = initialState
 
     this.onPeersChange = this.onPeersChange.bind(this)
-    /*
-    this.onAliasChange = this.onAliasChange.bind(this)
-    this.onSaveAlias = this.onSaveAlias.bind(this)
-    this.onAliasesStateChanged = this.onAliasesStateChanged.bind(this)
-    */
 
     if (props.doc) {
       props.doc.on('membership changed', this.onPeersChange)
-      // this.bindAliases()
     }
   }
 
@@ -32,10 +25,8 @@ export default class Peers extends Component {
     // Remove listener if receiving new peers object
     if (nextProps.doc && this.props.doc) {
       this.props.doc.removeListener('membership changed', this.onPeersChange)
-      // await this.unbindAliases()
       nextProps.doc.on('membership changed', this.onPeersChange)
       this.setState({ peers: nextProps.doc.peers() })
-      // this.bindAliases(nextProps.doc)
     }
   }
 
@@ -49,78 +40,37 @@ export default class Peers extends Component {
     this.setState({ peers: this.props.doc.peers() })
   }
 
-  /*
-  onAliasesStateChanged () {
-    this.props.doc.sub('aliases', 'mvreg')
-      .then((aliasesCollab) => {
-        const aliases = mergeAliases(aliasesCollab.shared.value())
-        this.setState({ aliases })
-      })
-  }
-
-  unbindAliases () {
-    return this.props.doc.sub('aliases', 'mvreg')
-      .then((aliasesCollab) => {
-        aliasesCollab.removeListener('state changed', this.onAliasesStateChanged)
-      })
-  }
-
-  bindAliases (doc) {
-    if (!doc) {
-      doc = this.props.doc
-    }
-    doc.sub('aliases', 'mvreg')
-      .then((aliasesCollab) => {
-        const aliases = mergeAliases(aliasesCollab.shared.value())
-        this.setState({ aliases })
-        aliasesCollab.on('state changed', this.onAliasesStateChanged)
-      })
-      .catch((err) => {
-        console.error('error in aliases collaboration:', err)
-      })
-  }
-
-  onAliasChange (ev) {
-    const alias = ev.target.value
-    this.setState({ alias })
-  }
-
-  onSaveAlias () {
-    const { alias } = this.state
-    this.props.onAliasChange(alias)
-  }
-  */
-
   render () {
-    // const { peers, alias } = this.state
     const { peers } = this.state
+    const { ipfsId } = this.props
     const peerIds = Array.from(peers).sort()
     const count = peerIds.length - 1
-    //            alias={(this.state.aliases && this.state.aliases[id]) || ''}
     return (
-      <div className='pa3'>
+      <div className="peers">
         {count >= 0 ? (
-          <ul className='ma0 pa0'>
-            {peerIds.map((id, i) => (
-              <PeerItem
-                key={id}
-                id={id}
-                last={i === count - 1} />
-            ))}
+          <ul>
+            {peerIds.map((id) => {
+              if (id === ipfsId) {
+                // List self first in list
+                return (<PeerItem
+                  key={id}
+                  id={id}
+                />)
+              }
+            })}
+            {peerIds.map((id) => {
+              if (id !== ipfsId) {
+                // List all others
+                return (<PeerItem
+                  key={id}
+                  id={id}
+                />)
+              }
+            })}
           </ul>
         ) : (
-          <p className='f6 ma0'>No other peers</p>
+          <p>No peers</p>
         )}
-        {
-          /*
-          this.props.canEdit ? (
-            <div className='f6 ma0 pa0'>
-              <input type='text' value={alias} placeholder='Your name' onChange={this.onAliasChange} />
-              <button type='button' onClick={this.onSaveAlias}>SET</button>
-            </div>
-          ) : null
-          */
-        }
       </div>
     )
   }
@@ -128,25 +78,14 @@ export default class Peers extends Component {
 
 Peers.propTypes = {
   doc: PropTypes.object,
-  // alias: PropTypes.string,
-  // onAliasChange: PropTypes.func
+  ipfsId: PropTypes.string
 }
 
-const PeerItem = ({ id, alias, last }) => {
-  let aliasElem = (alias ? <span>{alias}</span> : '')
-  if (!aliasElem) {
-    aliasElem = id
-  }
+const PeerItem = ({ id }) => {
   return (
     <li>
-      <span
-        style={{
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          borderBottom: `3px solid ${peerColor(id)}`
-        }}
-        title={alias || id}>
-        {aliasElem}
+      <span style={{borderBottom: `3px solid ${peerColor(id)}`}}>
+        {id.slice(id.length - 3)}
       </span>
     </li>
   )

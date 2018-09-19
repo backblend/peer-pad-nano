@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import prettyHash from 'pretty-hash'
 
 import config from './config'
 import bindEditor from './lib/bind-editor'
@@ -24,7 +25,6 @@ class Edit extends Component {
       canEdit: keys.split('-').length >= 2,
       encodedKeys: keys,
       viewMode: 'source',
-      // alias: window.localStorage.getItem('alias'),
       doc: null,
       isDebuggingEnabled: !!window.localStorage.getItem('debug')
     }
@@ -32,7 +32,6 @@ class Edit extends Component {
     this.onViewModeChange = this.onViewModeChange.bind(this)
     this.onEditor = this.onEditor.bind(this)
     this.onEditorValueChange = this.onEditorValueChange.bind(this)
-    // this.onAliasChange = this.onAliasChange.bind(this)
     this.onDebuggingStart = this.onDebuggingStart.bind(this)
     this.onDebuggingStop = this.onDebuggingStop.bind(this)
   }
@@ -64,20 +63,6 @@ class Edit extends Component {
     this.setState({ documentText })
   }
 
-  /*
-  async onAliasChange (alias) {
-    this.setState({ alias })
-    const doc = this.state.doc
-    // cache globally for other pads to be able to use
-    window.localStorage.setItem('alias', alias)
-    const aliasesCollab = await doc.sub('aliases', 'mvreg')
-    let aliases = mergeAliases(aliasesCollab.shared.value())
-    const myPeerId = (await doc.app.ipfs.id()).id
-    aliases[myPeerId] = alias
-    aliasesCollab.shared.write(aliases)
-  }
-  */
-
   async onDebuggingStart () {
     (await import('@jimpick/peer-star-app')).debug.enable(debugScope)
     localStorage.setItem('debug', debugScope)
@@ -94,10 +79,11 @@ class Edit extends Component {
 
   render () {
     const {
+      doc,
       type,
       status,
       canEdit,
-      // alias
+      ipfsId
     } = this.state
 
     const {
@@ -105,12 +91,14 @@ class Edit extends Component {
       onEditorValueChange
     } = this
 
-    // <Peers doc={this.state.doc} alias={alias} onAliasChange={this.onAliasChange} canEdit={this.state.canEdit} />
     return (
       <div className="doc">
         <a href='#'>PeerPad Nano Home</a>
-        <div>Status: {status}</div>
-        <Peers doc={this.state.doc} canEdit={this.state.canEdit} />
+        <div className="status">
+          <span>Collaboration: {doc ? prettyHash(doc.name) : 'Loading'}</span>
+          <span>Status: {status}</span>
+        </div>
+        <Peers doc={doc} ipfsId={ipfsId} />
         <input
           ref={(ref) => { this._titleRef = ref }}
           type='text'
@@ -146,6 +134,8 @@ class Edit extends Component {
         window.alert(err.message)
       })
       await this._backend.start()
+      const { id } = await this._backend.ipfs.id()
+      this.setState({ ipfsId: id })
     }
 
     const keys = await PeerStar.keys.uriDecode(this.state.encodedKeys)

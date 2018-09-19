@@ -13,3 +13,11 @@
 .CodeMirror {
   flex: 1;
 }
+
+.status span {
+  margin-right: 1rem;
+}
+
+.peers {
+  font-family: monospace;
+}
