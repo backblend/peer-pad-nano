@@ -108,8 +108,26 @@ class Edit extends Component {
     // <Peers doc={this.state.doc} alias={alias} onAliasChange={this.onAliasChange} canEdit={this.state.canEdit} />
     return (
       <div className="doc">
-        <a href='#'>PeerPad Nano Home</a>
-        <div>Status: {status}</div>
+        <h1>Is PeerPad fast yet?</h1>
+        <p>Using PeerPad to track our progress...</p>
+        <div>
+          <h3>Known bugs</h3>
+          <ul>
+            <li>You probably will need to reload this page once
+              the data is synced - it doesn't seem to be refreshing
+              properly.
+            </li>
+            <li>
+              The pinning service is attached to the collaboration, but it
+              doesn't seem to work yet. So the document may not load
+              if somebody doesn't have the page loaded in a browser.
+            </li>
+            <li>
+              Text is getting corrupted!
+            </li>
+          </ul>
+        </div>
+        <div><b>Status:</b> {status}</div>
         <Peers doc={this.state.doc} canEdit={this.state.canEdit} />
         <input
           ref={(ref) => { this._titleRef = ref }}
@@ -140,7 +158,7 @@ class Edit extends Component {
     const PeerStar = await import('@jimpick/peer-star-app')
 
     if (!this._backend) {
-      this._backend = PeerStar('peer-pad-nano', config.peerStar)
+      this._backend = PeerStar('peer-star-demo', config.peerStar)
       this._backend.on('error', (err) => {
         console.error(err)
         window.alert(err.message)

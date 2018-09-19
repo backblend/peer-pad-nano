@@ -20,14 +20,20 @@ class App extends Component {
 
   render () {
     const { hash } = this.state
-    let match = hash.match(/^#\/w\/markdown\/([^/]+)\/([^/]+)$/)
+    // let match = hash.match(/^#\/w\/markdown\/([^/]+)\/([^/]+)$/)
+    const match = [
+      null,
+      'CBk41tXvL2e4E2VxMF7SduUt9PA238XFVmzU6UKYGZni',
+      '4XTTMGwp3xtibjdVPcr5je7tc3YYmgqpe23XqjxZrELjF1Hwh-K3TgUKU7d6mDPxtqetw3THj4sWtDx7FwFY3BpMuSTFQHjxGsG8LKnhd1YXHdeXfAtqZ3BGskkTNwdbxnPdcc2hEvsgjBSVHnNUqwR5EZWetheTo4PHDd714vFkFLtvBJq2gGdXab'
+    ]
     if (match) {
       const [_, name, keys] = match
       return <Edit name={name} keys={keys} />
     } else {
       return (
         <div>
-          <h1>PeerPad Nano</h1>
+          <h1>Is PeerPad Fast Yet?</h1>
+
           <CreateDocumentContainer children={({onCreateDocument}) => (
             <button onClick={onCreateDocument}>START</button>
           )} />
