@@ -26,6 +26,15 @@
 .peers ul {
   list-style: none;
   line-height: 150%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.peers li {
+  background: whitesmoke;
+  margin: 0.5rem;
+  padding: 0.2rem;
+  border-radius: 0.3rem;
 }
 
 .peers ul li.local::before {
