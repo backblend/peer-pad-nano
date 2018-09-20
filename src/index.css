@@ -1,3 +1,12 @@
+h1, h1 + p {
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
+.bugs {
+  font-size: 75%;
+}
+
 .doc {
   display: flex;
   flex-direction: column;
@@ -8,8 +17,44 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  min-height: 60vh;
 }
 
 .CodeMirror {
   flex: 1;
+}
+
+.status span {
+  margin-right: 1rem;
+}
+
+.peers {
+  font-family: monospace;
+}
+
+.peers ul {
+  list-style: none;
+  line-height: 150%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.peers li {
+  background: whitesmoke;
+  margin: 0.5rem;
+  padding: 0.2rem;
+  border-radius: 0.3rem;
+}
+
+.peers ul li.local::before {
+  content: "▶";
+  color: #666666;
+  display: inline-block;
+  font-size: 50%;
+  width: 1.5em;
+  margin-left: -1.5em;
+}
+
+.peers ul li span {
+  margin-right: 0.5rem;
 }

@@ -50,7 +50,6 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
         return
       }
       editorText = editor.getValue()
-      if (!editorText) return
       const diffs = Diff(doc.shared.value().join(''), editorText)
       applyDiffs(0, diffs)
       // console.log('Jim2', doc.shared.value().join(''))
@@ -70,10 +69,10 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
     // console.log('Jim onStateChanged 2')
     queue.push(() => {
       // let oldText = editor.getValue()
-      let oldText = editorText
+      let oldText = editorText || ''
       let newText = doc.shared.value().join('')
 
-      if (!oldText || !newText || oldText === newText) {
+      if (oldText === newText) {
         pending = false
         return
       }
@@ -114,6 +113,7 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
             if (pos < cursorPos) {
               cursorPos += text.length
             }
+            pos += text.length
             // moveMarkersIfAfter(pos, text.length)
           }
         }
