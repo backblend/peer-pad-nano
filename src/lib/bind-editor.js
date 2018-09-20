@@ -50,7 +50,6 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
         return
       }
       editorText = editor.getValue()
-      if (!editorText) return
       const diffs = Diff(doc.shared.value().join(''), editorText)
       applyDiffs(0, diffs)
       // console.log('Jim2', doc.shared.value().join(''))
@@ -114,6 +113,7 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
             if (pos < cursorPos) {
               cursorPos += text.length
             }
+            pos += text.length
             // moveMarkersIfAfter(pos, text.length)
           }
         }

@@ -45,23 +45,22 @@ export default class Peers extends Component {
     const { ipfsId, localClock } = this.props
 
     if (!ipfsId) return <p>No peers</p>
+    const peersAndClockPeers = localClock
+      ? new Set([...peers, ...Object.keys(localClock)])
+      : peers
     const peerIds = Array
-      .from(peers)
-      .filter((id) => id !== ipfsId)
+      .from(peersAndClockPeers)
       .sort()
     return (
       <div className="peers">
         <ul>
-          <PeerItem
-            key={ipfsId}
-            id={ipfsId}
-            clock={localClock && localClock[ipfsId]}
-          />
           {peerIds.map((id) => (
             <PeerItem
               key={id}
               id={id}
               clock={localClock && localClock[id]}
+              connected={peers.has(id)}
+              local={id === ipfsId}
             />
           ))}
         </ul>
@@ -76,10 +75,13 @@ Peers.propTypes = {
   localClock: PropTypes.object
 }
 
-const PeerItem = ({ id, clock }) => {
+const PeerItem = ({ id, clock, connected, local }) => {
+  const style = {
+    borderBottom: `3px ${connected ? 'solid' : 'dotted'} ${peerColor(id)}`
+  }
   return (
-    <li>
-      <span style={{borderBottom: `3px solid ${peerColor(id)}`}}>
+    <li className={local ? 'local' : ''}>
+      <span style={style}>
         {id.slice(id.length - 3)}
       </span>
       {clock}
