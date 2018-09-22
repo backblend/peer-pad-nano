@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import Edit from './Edit'
-import CreateDocumentContainer from './CreateDocumentContainer'
 import './index.css'
 
 class App extends Component {
@@ -20,20 +19,24 @@ class App extends Component {
 
   render () {
     const { hash } = this.state
-    let match = hash.match(/^#\/w\/markdown\/([^/]+)\/([^/]+)$/)
+    let match = hash.match(/^#\/([^/]+)$/)
     if (match) {
-      const [_, name, keys] = match
-      return <Edit name={name} keys={keys} />
+      const [_, name] = match
+      return <Edit name={name} />
     } else {
       return (
         <div>
           <h1>PeerPad Nano</h1>
-          <CreateDocumentContainer children={({onCreateDocument}) => (
-            <button onClick={onCreateDocument}>START</button>
-          )} />
+          <button onClick={this.onCreateDocument}>START</button>
         </div>
       )
     }
+  }
+
+  async onCreateDocument () {
+    const generateRandomName = await import('@jimpick/peer-star-app/src/keys/generate-random-name')
+    const name = encodeURIComponent(generateRandomName())
+    location.hash = `/${name}`
   }
 }
 

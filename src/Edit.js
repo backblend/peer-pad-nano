@@ -12,13 +12,11 @@ class Edit extends Component {
   constructor (props) {
     super(props)
 
-    const { name, keys } = props
+    const { name } = props
 
     this.state = {
       name: decodeURIComponent(name),
       status: 'offline',
-      canEdit: keys.split('-').length >= 2,
-      encodedKeys: keys,
       doc: null
     }
 
@@ -49,7 +47,6 @@ class Edit extends Component {
       doc,
       type,
       status,
-      canEdit,
       ipfsId,
       localClock
     } = this.state
@@ -71,14 +68,6 @@ class Edit extends Component {
           Rendezvous: {config.peerStar.ipfs.swarm}
         </div>
         <Peers doc={doc} ipfsId={ipfsId} localClock={localClock} />
-        <input
-          ref={(ref) => { this._titleRef = ref }}
-          type='text'
-          placeholder='Document Title'
-          readOnly={!canEdit}
-          data-id='document-title-input'
-          hidden
-          />
         <Editor
           docType={type}
           onEditor={onEditor}
@@ -92,15 +81,17 @@ class Edit extends Component {
     // Force codemirror to update to help avoid render / write order issues
     if (this._editor && this._editor.refresh) {
       this._editor.refresh()
-      this._editor.setOption('readOnly', !this.state.canEdit)
+      this._editor.setOption('readOnly', false)
     }
   }
 
   async componentDidMount () {
+    const { name } = this.state
     const PeerStar = await import('@jimpick/peer-star-app')
 
     if (!this._backend) {
-      this._backend = PeerStar('peer-pad-nano', config.peerStar)
+      // this._backend = PeerStar('peer-pad-nano', config.peerStar)
+      this._backend = PeerStar('peer-star-demo', config.peerStar)
       this._backend.on('error', (err) => {
         console.error(err)
         window.alert(err.message)
@@ -110,16 +101,8 @@ class Edit extends Component {
       this.setState({ ipfsId: id })
     }
 
-    const keys = await PeerStar.keys.uriDecode(this.state.encodedKeys)
-
-    const doc = await this._backend.collaborate(
-      this.state.name,
-      'rga',
-      {
-        keys,
-        maxDeltaRetention: 0
-      })
-
+    const options = { keys: {} }
+    const doc = await this._backend.collaborate(name, 'rga', options)
     this.setState({ doc })
 
     this.clockIntervalId = setInterval(() => {
@@ -146,13 +129,6 @@ class Edit extends Component {
     await doc.start()
 
     this.maybeActivateEditor()
-
-    // Bind the editor if we got an instance while the doc was starting
-
-    // TODO: bind the editor to the document
-    // if (this._editor) doc.bindEditor(this._editor)
-
-    // Turn the doc title into a peer editable input.
   }
 
   componentWillUnmount () {
