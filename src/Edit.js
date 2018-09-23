@@ -4,40 +4,23 @@ import prettyHash from 'pretty-hash'
 
 import config from './config'
 import bindEditor from './lib/bind-editor'
-// import mergeAliases from './lib/merge-aliases'
 
 import Peers from './Peers'
 import Editor from './Editor'
-
-const debugScope = 'peer-star:collaboration:*'
 
 class Edit extends Component {
   constructor (props) {
     super(props)
 
-    const { name, keys } = props
+    const { name } = props
 
     this.state = {
       name: decodeURIComponent(name),
-      documentText: '',
       status: 'offline',
-      room: {},
-      canEdit: keys.split('-').length >= 2,
-      encodedKeys: keys,
-      viewMode: 'source',
-      doc: null,
-      isDebuggingEnabled: !!window.localStorage.getItem('debug')
+      doc: null
     }
 
-    this.onViewModeChange = this.onViewModeChange.bind(this)
     this.onEditor = this.onEditor.bind(this)
-    this.onEditorValueChange = this.onEditorValueChange.bind(this)
-    this.onDebuggingStart = this.onDebuggingStart.bind(this)
-    this.onDebuggingStop = this.onDebuggingStop.bind(this)
-  }
-
-  onViewModeChange (viewMode) {
-    this.setState({ viewMode })
   }
 
   onEditor (nextEditor) {
@@ -59,30 +42,11 @@ class Edit extends Component {
     }
   }
 
-  onEditorValueChange (documentText) {
-    this.setState({ documentText })
-  }
-
-  async onDebuggingStart () {
-    (await import('@jimpick/peer-star-app')).debug.enable(debugScope)
-    localStorage.setItem('debug', debugScope)
-    console.log('debugging started')
-    this.setState({isDebuggingEnabled: true})
-  }
-
-  async onDebuggingStop () {
-    (await import('@jimpick/peer-star-app')).debug.disable()
-    localStorage.setItem('debug', '')
-    console.log('debugging stopped')
-    this.setState({isDebuggingEnabled: false})
-  }
-
   render () {
     const {
       doc,
       type,
       status,
-      canEdit,
       ipfsId,
       localClock
     } = this.state
@@ -96,29 +60,15 @@ class Edit extends Component {
       <div className="doc">
         <h1>Is PeerPad fast yet?</h1>
         <p>Using PeerPad to track our progress...</p>
-        <div className="bugs">
-          <h3>Known bugs</h3>
-          <ul>
-            <li>
-              The pinning service is attached to the collaboration, but it
-              doesn't seem to work yet. So the document may not load
-              if somebody doesn't have the page loaded in a browser.
-            </li>
-          </ul>
-        </div>
         <div className="status">
+          <span>App: {doc ? doc.app.name : 'Loading'}</span>
           <span>Collaboration: {doc ? prettyHash(doc.name) : 'Loading'}</span>
           <span>Status: {status}</span>
         </div>
+        <div className="rendezvous">
+          Rendezvous: {config.peerStar.ipfs.swarm}
+        </div>
         <Peers doc={doc} ipfsId={ipfsId} localClock={localClock} />
-        <input
-          ref={(ref) => { this._titleRef = ref }}
-          type='text'
-          placeholder='Document Title'
-          readOnly={!canEdit}
-          data-id='document-title-input'
-          hidden
-          />
         <Editor
           docType={type}
           onEditor={onEditor}
@@ -132,11 +82,12 @@ class Edit extends Component {
     // Force codemirror to update to help avoid render / write order issues
     if (this._editor && this._editor.refresh) {
       this._editor.refresh()
-      this._editor.setOption('readOnly', !this.state.canEdit)
+      this._editor.setOption('readOnly', false)
     }
   }
 
   async componentDidMount () {
+    const { name } = this.state
     const PeerStar = await import('@jimpick/peer-star-app')
 
     if (!this._backend) {
@@ -150,16 +101,8 @@ class Edit extends Component {
       this.setState({ ipfsId: id })
     }
 
-    const keys = await PeerStar.keys.uriDecode(this.state.encodedKeys)
-
-    const doc = await this._backend.collaborate(
-      this.state.name,
-      'rga',
-      {
-        keys,
-        maxDeltaRetention: 0
-      })
-
+    const options = { keys: {} }
+    const doc = await this._backend.collaborate(name, 'rga', options)
     this.setState({ doc })
 
     this.clockIntervalId = setInterval(() => {
@@ -179,7 +122,6 @@ class Edit extends Component {
       this.setState({ status: 'online' })
     } else {
       this._backend.ipfs.once('started', () => {
-        this.onDebuggingStart() // activate debugging
         this.setState({ status: 'online' })
       })
     }
@@ -187,13 +129,6 @@ class Edit extends Component {
     await doc.start()
 
     this.maybeActivateEditor()
-
-    // Bind the editor if we got an instance while the doc was starting
-
-    // TODO: bind the editor to the document
-    // if (this._editor) doc.bindEditor(this._editor)
-
-    // Turn the doc title into a peer editable input.
   }
 
   componentWillUnmount () {

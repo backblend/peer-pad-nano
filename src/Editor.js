@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import CodeMirror from 'codemirror'
-import 'codemirror/mode/markdown/markdown'
 import 'codemirror/lib/codemirror.css'
 
 export default class Editor extends Component {
@@ -23,7 +22,6 @@ export default class Editor extends Component {
         value: '',
         viewportMargin: Infinity,
         lineWrapping: true,
-        mode: 'markdown',
         readOnly: 'nocursor'
       })
 
@@ -41,12 +39,6 @@ export default class Editor extends Component {
 }
 
 Editor.propTypes = {
-  type: PropTypes.oneOf(['markdown']),
-  editable: PropTypes.bool,
   onEditor: PropTypes.func,
   onChange: PropTypes.func
-}
-
-Editor.defaultProps = {
-  editable: true
 }

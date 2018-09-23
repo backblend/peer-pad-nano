@@ -24,8 +24,15 @@ h1, h1 + p {
   flex: 1;
 }
 
+.status {
+  font-size: 75%;
+}
 .status span {
   margin-right: 1rem;
+}
+
+.rendezvous {
+  font-size: 50%;
 }
 
 .peers {
