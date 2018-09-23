@@ -65,3 +65,11 @@ h1, h1 + p {
 .peers ul li span {
   margin-right: 0.5rem;
 }
+
+.CodeMirror {
+  font-size: 16px;
+}
+
+.CodeMirror-scroll {
+  -webkit-overflow-scrolling: touch;
+}
