@@ -91,7 +91,7 @@ class Edit extends Component {
 
     if (!this._backend) {
       // this._backend = PeerStar('peer-pad-nano', config.peerStar)
-      this._backend = PeerStar('peer-star-demo', config.peerStar)
+      this._backend = PeerStar('peer-star-demo-2', config.peerStar)
       this._backend.on('error', (err) => {
         console.error(err)
         window.alert(err.message)
@@ -101,7 +101,10 @@ class Edit extends Component {
       this.setState({ ipfsId: id })
     }
 
-    const options = { keys: {} }
+    const options = {
+      keys: {},
+      samplingIntervalMS: 5000
+    }
     const doc = await this._backend.collaborate(name, 'rga', options)
     this.setState({ doc })
 
