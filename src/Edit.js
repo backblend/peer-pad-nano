@@ -128,7 +128,7 @@ class Edit extends Component {
     })
 
     doc.stats.on('peer updated', (peerId, stats) => {
-      console.log('peer %s updated its stats to:', peerId, stats)
+      // console.log('peer %s updated its stats to:', peerId, stats)
       if (peerId === self.state.ipfsId) {
         const { connections } = stats
         self.setState({ connections })

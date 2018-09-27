@@ -86,12 +86,18 @@ const PeerItem = ({ id, clock, inPeers, local, connections }) => {
       connections.outbound.has(id)
     ) {
       borderStyle = 'solid'
+    } else if (
+      connections &&
+      (connections.inbound.has(id) ||
+       connections.outbound.has(id))
+    ) {
+      borderStyle = 'dashed'
     } else {
       borderStyle = 'dotted'
     }
   }
   const style = {
-    borderBottom: `3px ${borderStyle} ${peerColor(id)}`
+    borderBottom: `2px ${borderStyle} ${peerColor(id)}`
   }
   return (
     <li className={local ? 'local' : ''}>
