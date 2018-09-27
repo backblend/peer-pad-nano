@@ -42,7 +42,7 @@ export default class Peers extends Component {
 
   render () {
     const { peers } = this.state
-    const { ipfsId, localClock } = this.props
+    const { ipfsId, localClock, connections } = this.props
 
     if (!ipfsId) return <p>No peers</p>
     const peersAndClockPeers = localClock
@@ -59,8 +59,9 @@ export default class Peers extends Component {
               key={id}
               id={id}
               clock={localClock && localClock[id]}
-              connected={peers.has(id)}
+              inPeers={peers.has(id)}
               local={id === ipfsId}
+              connections={connections}
             />
           ))}
         </ul>
@@ -72,12 +73,25 @@ export default class Peers extends Component {
 Peers.propTypes = {
   doc: PropTypes.object,
   ipfsId: PropTypes.string,
-  localClock: PropTypes.object
+  localClock: PropTypes.object,
+  connections: PropTypes.object
 }
 
-const PeerItem = ({ id, clock, connected, local }) => {
+const PeerItem = ({ id, clock, inPeers, local, connections }) => {
+  let borderStyle = 'none'
+  if (!local) {
+    if (
+      connections &&
+      connections.inbound.has(id) &&
+      connections.outbound.has(id)
+    ) {
+      borderStyle = 'solid'
+    } else {
+      borderStyle = 'dotted'
+    }
+  }
   const style = {
-    borderBottom: `3px ${connected ? 'solid' : 'dotted'} ${peerColor(id)}`
+    borderBottom: `3px ${borderStyle} ${peerColor(id)}`
   }
   return (
     <li className={local ? 'local' : ''}>

@@ -48,7 +48,8 @@ class Edit extends Component {
       type,
       status,
       ipfsId,
-      localClock
+      localClock,
+      connections
     } = this.state
 
     const {
@@ -68,12 +69,17 @@ class Edit extends Component {
         <div className="rendezvous">
           Rendezvous: {config.peerStar.ipfs.swarm}
         </div>
-        <Peers doc={doc} ipfsId={ipfsId} localClock={localClock} />
+        <Peers
+          doc={doc}
+          ipfsId={ipfsId}
+          localClock={localClock}
+          connections={connections}
+        />
         <Editor
           docType={type}
           onEditor={onEditor}
           onEditorValueChange={onEditorValueChange}
-          />
+        />
       </div>
     )
   }
@@ -89,6 +95,7 @@ class Edit extends Component {
   async componentDidMount () {
     const { name } = this.state
     const PeerStar = await import('@jimpick/peer-star-app')
+    const self = this
 
     if (!this._backend) {
       this._backend = PeerStar('peer-star-demo', config.peerStar)
@@ -101,7 +108,10 @@ class Edit extends Component {
       this.setState({ ipfsId: id })
     }
 
-    const options = { keys: {} }
+    const options = {
+      keys: {},
+      samplingIntervalMS: 5000
+    }
     const doc = await this._backend.collaborate(name, 'rga', options)
     this.setState({ doc })
 
@@ -115,6 +125,14 @@ class Edit extends Component {
     doc.on('error', (err) => {
       console.log(err)
       window.alert(err.message)
+    })
+
+    doc.stats.on('peer updated', (peerId, stats) => {
+      console.log('peer %s updated its stats to:', peerId, stats)
+      if (peerId === self.state.ipfsId) {
+        const { connections } = stats
+        self.setState({ connections })
+      }
     })
 
     // Watch for out local ipfs node to come online.
