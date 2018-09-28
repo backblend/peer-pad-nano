@@ -52,6 +52,14 @@
   border-radius: 0.3rem;
 }
 
+.peers li.local {
+  background: mistyrose;
+}
+
+.peers li.inAppTransportDiasSet {
+  background: lavender;
+}
+
 .peers ul li.local::before {
   content: "▶";
   color: #666666;
@@ -61,8 +69,9 @@
   margin-left: -1.5em;
 }
 
-.peers ul li span {
+.peers ul li {
   margin-right: 0.5rem;
+  padding: 0.1rem 0.3rem;
 }
 
 .CodeMirror {

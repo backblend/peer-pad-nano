@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import peerColor from './lib/peer-color'
 // import mergeAliases from './lib/merge-aliases'
 
@@ -46,6 +47,7 @@ export default class Peers extends Component {
       ipfsId,
       localClock,
       appTransportRing,
+      appTransportDiasSet,
       collaborationRing,
       connections
     } = this.props
@@ -86,9 +88,9 @@ export default class Peers extends Component {
               key={id}
               id={id}
               clock={localClock && localClock[id]}
-              inPeers={peers.has(id)}
               local={id === ipfsId}
               connections={connections}
+              inAppTransportDiasSet={appTransportDiasSet.has(id)}
             />
           ))}
         </ul><br/>
@@ -98,9 +100,9 @@ export default class Peers extends Component {
               key={id}
               id={id}
               clock={localClock && localClock[id]}
-              inPeers={peers.has(id)}
               local={id === ipfsId}
               connections={connections}
+              inAppTransportDiasSet={appTransportDiasSet.has(id)}
             />
           ))}
         </ul><br/>
@@ -110,9 +112,9 @@ export default class Peers extends Component {
               key={id}
               id={id}
               clock={localClock && localClock[id]}
-              inPeers={peers.has(id)}
               local={id === ipfsId}
               connections={connections}
+              inAppTransportDiasSet={appTransportDiasSet.has(id)}
             />
           ))}
         </ul>
@@ -126,11 +128,18 @@ Peers.propTypes = {
   ipfsId: PropTypes.string,
   localClock: PropTypes.object,
   appTransportRing: PropTypes.object,
+  appTransportDiasSet: PropTypes.object,
   collaborationRing: PropTypes.object,
   connections: PropTypes.object
 }
 
-const PeerItem = ({ id, clock, inPeers, local, connections }) => {
+const PeerItem = ({
+  id,
+  clock,
+  local,
+  connections,
+  inAppTransportDiasSet
+}) => {
   let borderStyle = 'none'
   if (!local) {
     if (
@@ -153,11 +162,11 @@ const PeerItem = ({ id, clock, inPeers, local, connections }) => {
     borderBottom: `2px ${borderStyle} ${peerColor(id)}`
   }
   return (
-    <li className={local ? 'local' : ''}>
+    <li className={classNames({local, inAppTransportDiasSet})}>
       <span style={style}>
         {id.slice(id.length - 3)}
       </span>
-      {clock}
+      {clock && <span>{' '}{clock}</span>}
     </li>
   )
 }
