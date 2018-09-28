@@ -62,7 +62,7 @@ export default class Peers extends Component {
       : peers
     const peerIdsSeen = Array
       .from(peersAndClockPeers)
-      .filter(peerId => collaborationRing.has(peerId)  || peerId === ipfsId)
+      .filter(peerId => collaborationRing.has(peerId) || peerId === ipfsId)
       .sort()
     const peerIdsOther = Array
       .from(peersAndClockPeers)
@@ -73,7 +73,10 @@ export default class Peers extends Component {
       .sort()
     const peerIdsAway = Array
       .from(peersAndClockPeers)
-      .filter(peerId => !appTransportRing.has(peerId) && peerId !== ipfsId)
+      .filter(peerId => !appTransportRing.has(peerId) &&
+                        !collaborationRing.has(peerId) &&
+                        peerId !== ipfsId
+      )
       .sort()
     return (
       <div className="peers">
