@@ -37,18 +37,26 @@ h1, h1 + p {
 
 .peers {
   font-family: monospace;
+  margin-bottom: 0.8rem;
 }
 
 .peers ul {
   list-style: none;
   line-height: 150%;
-  display: flex;
+  display: inline-flex;
   flex-wrap: wrap;
+  margin-block-start: 0;
+  margin-block-end: 0; */
+  padding-inline-start: 0;
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0;
+  -webkit-padding-start: 0;
+  padding-left: 0;
 }
 
 .peers li {
   background: whitesmoke;
-  margin: 0.5rem;
+  margin: 0.2rem 0.5rem;
   padding: 0.2rem;
   border-radius: 0.3rem;
 }

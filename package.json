@@ -5,7 +5,10 @@
   "leadMaintainer": "Jim Pick (@jimpick)",
   "scripts": {
     "start": "node scripts/start.js",
-    "start:rv": "rendezvous -p 9190",
+    "start:rv-demo": "rendezvous -p 9190",
+    "start:rv-demo-debug": "DEBUG=libp2p-websocket-star-rendezvous rendezvous -p 9190",
+    "start:rv-dev": "rendezvous -p 9191",
+    "start:rv-dev-debug": "DEBUG=libp2p-websocket-star-rendezvous rendezvous -p 9191",
     "build": "node scripts/build.js"
   },
   "dependencies": {
