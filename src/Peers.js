@@ -85,7 +85,8 @@ export default class Peers extends Component {
       .sort()
     return (
       <div className="peers">
-        Seen: <ul>
+        Seen:
+        <ul>
           {peerIdsSeen.map((id) => (
             <PeerItem
               key={id}
@@ -98,7 +99,8 @@ export default class Peers extends Component {
             />
           ))}
         </ul><br/>
-        Other: <ul>
+        Other:
+        <ul>
           {peerIdsOther.map((id) => (
             <PeerItem
               key={id}
@@ -111,7 +113,8 @@ export default class Peers extends Component {
             />
           ))}
         </ul><br/>
-        Away: <ul>
+        Away:
+        <ul>
           {peerIdsAway.map((id) => (
             <PeerItem
               key={id}
@@ -123,6 +126,28 @@ export default class Peers extends Component {
               inCollaborationDiasSet={collaborationDiasSet.has(id)}
             />
           ))}
+        </ul><br/>
+        Legend:
+        <ul>
+          <li>Peer</li>
+          <li className="local">Local</li>
+          <li className="inAppTransportDiasSet">Transport Dias Set</li>
+          <li className="inCollaborationDiasSet">Collab Dias Set</li>
+          <li>
+            <span style={{borderBottom: '2px dotted blue'}}>
+              Disconnected
+            </span>
+          </li>
+          <li>
+            <span style={{borderBottom: '2px dashed blue'}}>
+              Half-connected
+            </span>
+          </li>
+          <li>
+            <span style={{borderBottom: '2px solid blue'}}>
+              Connected
+            </span>
+          </li>
         </ul>
       </div>
     )
