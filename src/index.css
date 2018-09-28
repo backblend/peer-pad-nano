@@ -42,11 +42,12 @@
   -webkit-margin-before: 0;
   -webkit-margin-after: 0;
   -webkit-padding-start: 0;
+  padding-left: 0;
 }
 
 .peers li {
   background: whitesmoke;
-  margin: 0.5rem;
+  margin: 0.2rem 0.5rem;
   padding: 0.2rem;
   border-radius: 0.3rem;
 }
