@@ -49,6 +49,7 @@ class Edit extends Component {
       status,
       ipfsId,
       localClock,
+      appTransportRing,
       connections
     } = this.state
 
@@ -72,6 +73,7 @@ class Edit extends Component {
           doc={doc}
           ipfsId={ipfsId}
           localClock={localClock}
+          appTransportRing={appTransportRing}
           connections={connections}
         />
         <Editor
@@ -118,7 +120,15 @@ class Edit extends Component {
     this.clockIntervalId = setInterval(() => {
       if (doc && doc._clocks && this.state.ipfsId) {
         const localClock = doc._clocks._clocks.get(this.state.ipfsId)
-        this.setState({ localClock })
+        const ring = self._backend.ipfs._libp2pNode._transport[0]._ring
+        const appTransportRing = new Set(
+          Array.from(ring._contacts.values())
+          .map(peerInfo => peerInfo.id.toB58String())
+        )
+        this.setState({
+          localClock,
+          appTransportRing
+        })
       }
     }, 250)
 

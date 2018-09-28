@@ -42,19 +42,37 @@ export default class Peers extends Component {
 
   render () {
     const { peers } = this.state
-    const { ipfsId, localClock, connections } = this.props
+    const { ipfsId, localClock, appTransportRing, connections } = this.props
 
     if (!ipfsId) return <p>No peers</p>
+    if (!appTransportRing) return<p>Loading...</p>
     const peersAndClockPeers = localClock
-      ? new Set([...peers, ...Object.keys(localClock)])
+      ? new Set([...peers, ...Object.keys(localClock), ...appTransportRing])
       : peers
-    const peerIds = Array
+    const peerIdsSeen = Array
       .from(peersAndClockPeers)
+      .filter(peerId => appTransportRing.has(peerId) || peerId === ipfsId)
+      .sort()
+    const peerIdsAway = Array
+      .from(peersAndClockPeers)
+      .filter(peerId => !appTransportRing.has(peerId) && peerId !== ipfsId)
       .sort()
     return (
       <div className="peers">
-        <ul>
-          {peerIds.map((id) => (
+        Seen: <ul>
+          {peerIdsSeen.map((id) => (
+            <PeerItem
+              key={id}
+              id={id}
+              clock={localClock && localClock[id]}
+              inPeers={peers.has(id)}
+              local={id === ipfsId}
+              connections={connections}
+            />
+          ))}
+        </ul><br/>
+        Away: <ul>
+          {peerIdsAway.map((id) => (
             <PeerItem
               key={id}
               id={id}
@@ -74,6 +92,7 @@ Peers.propTypes = {
   doc: PropTypes.object,
   ipfsId: PropTypes.string,
   localClock: PropTypes.object,
+  appTransportRing: PropTypes.object,
   connections: PropTypes.object
 }
 
