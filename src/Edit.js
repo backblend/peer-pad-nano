@@ -105,8 +105,8 @@ class Edit extends Component {
     const self = this
 
     if (!this._backend) {
-      // this._backend = PeerStar('peer-pad-nano', config.peerStar)
-      this._backend = PeerStar('peer-star-demo-2', config.peerStar)
+      this._backend = PeerStar('peer-pad-nano', config.peerStar)
+      // this._backend = PeerStar('peer-star-demo-2', config.peerStar)
       this._backend.on('error', (err) => {
         console.error(err)
         window.alert(err.message)
