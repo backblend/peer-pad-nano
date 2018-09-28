@@ -52,6 +52,7 @@ class Edit extends Component {
       appTransportRing,
       appTransportDiasSet,
       collaborationRing,
+      collaborationDiasSet,
       connections
     } = this.state
 
@@ -78,6 +79,7 @@ class Edit extends Component {
           appTransportRing={appTransportRing}
           appTransportDiasSet={appTransportDiasSet}
           collaborationRing={collaborationRing}
+          collaborationDiasSet={collaborationDiasSet}
           connections={connections}
         />
         <Editor
@@ -143,11 +145,20 @@ class Edit extends Component {
           [...innerRing._contacts.values()]
           .map(peerInfo => peerInfo.id.toB58String())
         )
+        const innerDiasSet = doc._membership._diasSet(innerRing)
+        const collaborationDiasSet = new Set(
+          [...innerDiasSet].map(id => {
+            const shortId = id.slice(4) // remove 2 preamble bytes
+            const peerId = innerRing._contacts.get(shortId)
+            return peerId.id.toB58String()
+          })
+        )
         this.setState({
           localClock,
           appTransportRing,
           appTransportDiasSet,
-          collaborationRing
+          collaborationRing,
+          collaborationDiasSet
         })
       }
     }, 250)

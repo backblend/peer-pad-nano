@@ -60,6 +60,10 @@
   background: lavender;
 }
 
+.peers li.inCollaborationDiasSet {
+  border: 1px solid purple;
+}
+
 .peers ul li.local::before {
   content: "▶";
   color: #666666;
@@ -71,7 +75,7 @@
 
 .peers ul li {
   margin-right: 0.5rem;
-  padding: 0.1rem 0.3rem;
+  padding: 0.2rem 0.4rem;
 }
 
 .CodeMirror {

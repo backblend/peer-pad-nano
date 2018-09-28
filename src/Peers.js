@@ -49,6 +49,7 @@ export default class Peers extends Component {
       appTransportRing,
       appTransportDiasSet,
       collaborationRing,
+      collaborationDiasSet,
       connections
     } = this.props
 
@@ -59,7 +60,9 @@ export default class Peers extends Component {
           ...peers,
           ...Object.keys(localClock),
           ...appTransportRing,
-          ...collaborationRing
+          ...appTransportDiasSet,
+          ...collaborationRing,
+          ...collaborationDiasSet
         ])
       : peers
     const peerIdsSeen = Array
@@ -91,6 +94,7 @@ export default class Peers extends Component {
               local={id === ipfsId}
               connections={connections}
               inAppTransportDiasSet={appTransportDiasSet.has(id)}
+              inCollaborationDiasSet={collaborationDiasSet.has(id)}
             />
           ))}
         </ul><br/>
@@ -103,6 +107,7 @@ export default class Peers extends Component {
               local={id === ipfsId}
               connections={connections}
               inAppTransportDiasSet={appTransportDiasSet.has(id)}
+              inCollaborationDiasSet={collaborationDiasSet.has(id)}
             />
           ))}
         </ul><br/>
@@ -115,6 +120,7 @@ export default class Peers extends Component {
               local={id === ipfsId}
               connections={connections}
               inAppTransportDiasSet={appTransportDiasSet.has(id)}
+              inCollaborationDiasSet={collaborationDiasSet.has(id)}
             />
           ))}
         </ul>
@@ -130,6 +136,7 @@ Peers.propTypes = {
   appTransportRing: PropTypes.object,
   appTransportDiasSet: PropTypes.object,
   collaborationRing: PropTypes.object,
+  collaborationDiasSet: PropTypes.object,
   connections: PropTypes.object
 }
 
@@ -138,7 +145,8 @@ const PeerItem = ({
   clock,
   local,
   connections,
-  inAppTransportDiasSet
+  inAppTransportDiasSet,
+  inCollaborationDiasSet
 }) => {
   let borderStyle = 'none'
   if (!local) {
@@ -161,8 +169,13 @@ const PeerItem = ({
   const style = {
     borderBottom: `2px ${borderStyle} ${peerColor(id)}`
   }
+  const classes = classNames({
+    local,
+    inAppTransportDiasSet,
+    inCollaborationDiasSet
+  })
   return (
-    <li className={classNames({local, inAppTransportDiasSet})}>
+    <li className={classes}>
       <span style={style}>
         {id.slice(id.length - 3)}
       </span>
