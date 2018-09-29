@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import peerColor from './lib/peer-color'
 // import mergeAliases from './lib/merge-aliases'
 
@@ -46,7 +47,9 @@ export default class Peers extends Component {
       ipfsId,
       localClock,
       appTransportRing,
+      appTransportDiasSet,
       collaborationRing,
+      collaborationDiasSet,
       connections
     } = this.props
 
@@ -57,7 +60,9 @@ export default class Peers extends Component {
           ...peers,
           ...Object.keys(localClock),
           ...appTransportRing,
-          ...collaborationRing
+          ...appTransportDiasSet,
+          ...collaborationRing,
+          ...collaborationDiasSet
         ])
       : peers
     const peerIdsSeen = Array
@@ -80,41 +85,69 @@ export default class Peers extends Component {
       .sort()
     return (
       <div className="peers">
-        Seen: <ul>
+        Seen:
+        <ul>
           {peerIdsSeen.map((id) => (
             <PeerItem
               key={id}
               id={id}
               clock={localClock && localClock[id]}
-              inPeers={peers.has(id)}
               local={id === ipfsId}
               connections={connections}
+              inAppTransportDiasSet={appTransportDiasSet.has(id)}
+              inCollaborationDiasSet={collaborationDiasSet.has(id)}
             />
           ))}
         </ul><br/>
-        Other: <ul>
+        Other:
+        <ul>
           {peerIdsOther.map((id) => (
             <PeerItem
               key={id}
               id={id}
               clock={localClock && localClock[id]}
-              inPeers={peers.has(id)}
               local={id === ipfsId}
               connections={connections}
+              inAppTransportDiasSet={appTransportDiasSet.has(id)}
+              inCollaborationDiasSet={collaborationDiasSet.has(id)}
             />
           ))}
         </ul><br/>
-        Away: <ul>
+        Away:
+        <ul>
           {peerIdsAway.map((id) => (
             <PeerItem
               key={id}
               id={id}
               clock={localClock && localClock[id]}
-              inPeers={peers.has(id)}
               local={id === ipfsId}
               connections={connections}
+              inAppTransportDiasSet={appTransportDiasSet.has(id)}
+              inCollaborationDiasSet={collaborationDiasSet.has(id)}
             />
           ))}
+        </ul><br/>
+        Legend:
+        <ul>
+          <li>Peer</li>
+          <li className="local">Local</li>
+          <li className="inAppTransportDiasSet">Transport Dias Set</li>
+          <li className="inCollaborationDiasSet">Collab Dias Set</li>
+          <li>
+            <span style={{borderBottom: '2px dotted blue'}}>
+              Disconnected
+            </span>
+          </li>
+          <li>
+            <span style={{borderBottom: '2px dashed blue'}}>
+              Half-connected
+            </span>
+          </li>
+          <li>
+            <span style={{borderBottom: '2px solid blue'}}>
+              Connected
+            </span>
+          </li>
         </ul>
       </div>
     )
@@ -126,11 +159,20 @@ Peers.propTypes = {
   ipfsId: PropTypes.string,
   localClock: PropTypes.object,
   appTransportRing: PropTypes.object,
+  appTransportDiasSet: PropTypes.object,
   collaborationRing: PropTypes.object,
+  collaborationDiasSet: PropTypes.object,
   connections: PropTypes.object
 }
 
-const PeerItem = ({ id, clock, inPeers, local, connections }) => {
+const PeerItem = ({
+  id,
+  clock,
+  local,
+  connections,
+  inAppTransportDiasSet,
+  inCollaborationDiasSet
+}) => {
   let borderStyle = 'none'
   if (!local) {
     if (
@@ -152,12 +194,17 @@ const PeerItem = ({ id, clock, inPeers, local, connections }) => {
   const style = {
     borderBottom: `2px ${borderStyle} ${peerColor(id)}`
   }
+  const classes = classNames({
+    local,
+    inAppTransportDiasSet,
+    inCollaborationDiasSet
+  })
   return (
-    <li className={local ? 'local' : ''}>
+    <li className={classes}>
       <span style={style}>
         {id.slice(id.length - 3)}
       </span>
-      {clock}
+      {clock && <span>{' '}{clock}</span>}
     </li>
   )
 }

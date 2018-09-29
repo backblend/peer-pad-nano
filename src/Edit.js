@@ -50,7 +50,9 @@ class Edit extends Component {
       ipfsId,
       localClock,
       appTransportRing,
+      appTransportDiasSet,
       collaborationRing,
+      collaborationDiasSet,
       connections
     } = this.state
 
@@ -76,7 +78,9 @@ class Edit extends Component {
           ipfsId={ipfsId}
           localClock={localClock}
           appTransportRing={appTransportRing}
+          appTransportDiasSet={appTransportDiasSet}
           collaborationRing={collaborationRing}
+          collaborationDiasSet={collaborationDiasSet}
           connections={connections}
         />
         <Editor
@@ -125,18 +129,36 @@ class Edit extends Component {
         const appTransport = self._backend.ipfs._libp2pNode._transport[0]
         const outerRing = appTransport._ring
         const appTransportRing = new Set(
-          Array.from(outerRing._contacts.values())
+          [...outerRing._contacts.values()]
           .map(peerInfo => peerInfo.id.toB58String())
+        )
+        const outerDiasSet = appTransport._diasSet(outerRing)
+        const appTransportDiasSet = new Set(
+          [...outerDiasSet].map(id => {
+            const shortId = id.slice(4) // remove 2 preamble bytes
+            const peerId = outerRing._contacts.get(shortId)
+            return peerId.id.toB58String()
+          })
         )
         const innerRing = doc._membership._ring
         const collaborationRing = new Set(
-          Array.from(innerRing._contacts.values())
+          [...innerRing._contacts.values()]
           .map(peerInfo => peerInfo.id.toB58String())
+        )
+        const innerDiasSet = doc._membership._diasSet(innerRing)
+        const collaborationDiasSet = new Set(
+          [...innerDiasSet].map(id => {
+            const shortId = id.slice(4) // remove 2 preamble bytes
+            const peerId = innerRing._contacts.get(shortId)
+            return peerId.id.toB58String()
+          })
         )
         this.setState({
           localClock,
           appTransportRing,
-          collaborationRing
+          appTransportDiasSet,
+          collaborationRing,
+          collaborationDiasSet
         })
       }
     }, 250)
