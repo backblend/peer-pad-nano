@@ -161,7 +161,7 @@ class Edit extends Component {
           collaborationDiasSet
         })
       }
-    }, 250)
+    }, 1000)
 
     doc.on('error', (err) => {
       console.log(err)
