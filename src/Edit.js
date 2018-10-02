@@ -118,7 +118,8 @@ class Edit extends Component {
 
     const options = {
       keys: {},
-      samplingIntervalMS: 5000
+      samplingIntervalMS: 5000,
+      maxUnreachableBeforeEviction: 0
     }
     const doc = await this._backend.collaborate(name, 'rga', options)
     this.setState({ doc })
