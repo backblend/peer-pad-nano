@@ -8,7 +8,7 @@ module.exports = {
       ],
       transport: {
         // maxThrottleDelayMS: 5 * 60 * 1000 // 5 minutes
-        maxThrottleDelayMS: 15 * 1000 // 15 seconds
+        maxThrottleDelayMS: 1 * 1000 // 1 second
       }
     }
   }
