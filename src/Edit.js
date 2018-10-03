@@ -120,7 +120,7 @@ class Edit extends Component {
     const options = {
       keys: {},
       samplingIntervalMS: 5000,
-      maxUnreachableBeforeEviction: 0
+      maxUnreachableBeforeEviction: 0,
       maxDeltaRetention: 10,
       deltaTrimTimeoutMS: 250
     }
