@@ -61,6 +61,16 @@ class Edit extends Component {
       onEditorValueChange
     } = this
 
+    const peers = <Peers
+                    doc={doc}
+                    ipfsId={ipfsId}
+                    localClock={localClock}
+                    appTransportRing={appTransportRing}
+                    appTransportDiasSet={appTransportDiasSet}
+                    collaborationRing={collaborationRing}
+                    collaborationDiasSet={collaborationDiasSet}
+                    connections={connections}
+                  />
     return (
       <div className="doc">
         <a href='#'>PeerPad Nano Home</a>
@@ -72,16 +82,7 @@ class Edit extends Component {
         <div className="rendezvous">
           Rendezvous: {config.peerStar.ipfs.swarm}
         </div>
-        <Peers
-          doc={doc}
-          ipfsId={ipfsId}
-          localClock={localClock}
-          appTransportRing={appTransportRing}
-          appTransportDiasSet={appTransportDiasSet}
-          collaborationRing={collaborationRing}
-          collaborationDiasSet={collaborationDiasSet}
-          connections={connections}
-        />
+        {peers}
         <Editor
           docType={type}
           onEditor={onEditor}
@@ -118,7 +119,9 @@ class Edit extends Component {
 
     const options = {
       keys: {},
-      samplingIntervalMS: 5000
+      samplingIntervalMS: 5000,
+      maxDeltaRetention: 10,
+      deltaTrimTimeoutMS: 250
     }
     const doc = await this._backend.collaborate(name, 'rga', options)
     this.setState({ doc })
