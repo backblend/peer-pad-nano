@@ -7,7 +7,7 @@ module.exports = {
         '/dns4/ipfs.jimpick.com/tcp/9092/wss/ipfs/QmScdku7gc3VvfZZvT8kHU77bt6bnH3PnGXkyFRZ17g9EG'
       ],
       transport: {
-        maxThrottleDelayMS: 1 * 60 * 1000 // 1 minute
+        maxThrottleDelayMS: 3 * 1000 // 3 seconds
         // maxThrottleDelayMS: 15 * 1000 // 15 seconds
       }
     }
