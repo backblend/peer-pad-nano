@@ -34,6 +34,8 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
 
   const onCodeMirrorChange = (editor) => {
     queue.push(() => {
+      // pending = our changes haven't showed up in the CRDT yet
+      // locked = editor is being updated with CRDT changes
       if (!initialised || locked || pending) {
         return
       }
@@ -56,6 +58,7 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
 
       if (oldText === newText) {
         pending = false
+        onCodeMirrorChange(editor)
         return
       }
 
