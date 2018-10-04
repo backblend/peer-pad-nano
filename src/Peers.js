@@ -50,6 +50,9 @@ export default class Peers extends Component {
       appTransportDiasSet,
       collaborationRing,
       collaborationDiasSet,
+      pendingPeers,
+      testingPeers,
+      failedPeers,
       connections
     } = this.props
 
@@ -62,7 +65,10 @@ export default class Peers extends Component {
           ...appTransportRing,
           ...appTransportDiasSet,
           ...collaborationRing,
-          ...collaborationDiasSet
+          ...collaborationDiasSet,
+          ...pendingPeers,
+          ...testingPeers,
+          ...failedPeers
         ])
       : peers
     const peerIdsSeen = Array
@@ -71,7 +77,12 @@ export default class Peers extends Component {
       .sort()
     const peerIdsOther = Array
       .from(peersAndClockPeers)
-      .filter(peerId => appTransportRing.has(peerId) &&
+      .filter(peerId => (
+                          appTransportRing.has(peerId) ||
+                          pendingPeers.has(peerId) ||
+                          testingPeers.has(peerId) ||
+                          failedPeers.has(peerId)
+                        ) &&
                         !collaborationRing.has(peerId) &&
                         peerId !== ipfsId
       )
@@ -80,6 +91,9 @@ export default class Peers extends Component {
       .from(peersAndClockPeers)
       .filter(peerId => !appTransportRing.has(peerId) &&
                         !collaborationRing.has(peerId) &&
+                        !pendingPeers.has(peerId) &&
+                        !testingPeers.has(peerId) &&
+                        !failedPeers.has(peerId) &&
                         peerId !== ipfsId
       )
       .sort()
@@ -96,6 +110,9 @@ export default class Peers extends Component {
               connections={connections}
               inAppTransportDiasSet={appTransportDiasSet.has(id)}
               inCollaborationDiasSet={collaborationDiasSet.has(id)}
+              isPending={pendingPeers.has(id)}
+              isTesting={testingPeers.has(id)}
+              isFailed={failedPeers.has(id)}
             />
           ))}
         </ul><br/>
@@ -110,6 +127,9 @@ export default class Peers extends Component {
               connections={connections}
               inAppTransportDiasSet={appTransportDiasSet.has(id)}
               inCollaborationDiasSet={collaborationDiasSet.has(id)}
+              isPending={pendingPeers.has(id)}
+              isTesting={testingPeers.has(id)}
+              isFailed={failedPeers.has(id)}
             />
           ))}
         </ul><br/>
@@ -122,8 +142,6 @@ export default class Peers extends Component {
               clock={localClock && localClock[id]}
               local={id === ipfsId}
               connections={connections}
-              inAppTransportDiasSet={appTransportDiasSet.has(id)}
-              inCollaborationDiasSet={collaborationDiasSet.has(id)}
             />
           ))}
         </ul><br/>
@@ -148,6 +166,9 @@ export default class Peers extends Component {
               Connected
             </span>
           </li>
+          <li className="isPending">Pending</li>
+          <li className="isTesting">Testing</li>
+          <li className="isFailed">Failed</li>
         </ul>
       </div>
     )
@@ -162,6 +183,9 @@ Peers.propTypes = {
   appTransportDiasSet: PropTypes.object,
   collaborationRing: PropTypes.object,
   collaborationDiasSet: PropTypes.object,
+  pendingPeers: PropTypes.object,
+  testingPeers: PropTypes.object,
+  failedPeers: PropTypes.object,
   connections: PropTypes.object
 }
 
@@ -171,7 +195,10 @@ const PeerItem = ({
   local,
   connections,
   inAppTransportDiasSet,
-  inCollaborationDiasSet
+  inCollaborationDiasSet,
+  isPending,
+  isTesting,
+  isFailed
 }) => {
   let borderStyle = 'none'
   if (!local) {
@@ -197,7 +224,10 @@ const PeerItem = ({
   const classes = classNames({
     local,
     inAppTransportDiasSet,
-    inCollaborationDiasSet
+    inCollaborationDiasSet,
+    isPending,
+    isTesting,
+    isFailed
   })
   return (
     <li className={classes}>
