@@ -73,6 +73,18 @@ h1, h1 + p {
   border: 1px solid purple;
 }
 
+.peers li.isPending {
+  border: 1px dashed blue;
+}
+
+.peers li.isTesting {
+  border: 1px dashed orange;
+}
+
+.peers li.isFailed {
+  border: 1px solid red;
+}
+
 .peers ul li.local::before {
   content: "▶";
   color: #666666;
