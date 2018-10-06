@@ -12,7 +12,7 @@
     "build": "node scripts/build.js"
   },
   "dependencies": {
-    "@jimpick/peer-star-app": "^0.7.0-12",
+    "@jimpick/peer-star-app": "^0.7.2-1",
     "babel-core": "6.25.0",
     "babel-jest": "20.0.3",
     "babel-loader": "7.1.1",
