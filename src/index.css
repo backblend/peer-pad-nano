@@ -55,22 +55,9 @@ h1, h1 + p {
 }
 
 .peers li {
-  background: whitesmoke;
   margin: 0.2rem 0.5rem;
-  padding: 0.2rem;
+  padding: 0;
   border-radius: 0.3rem;
-}
-
-.peers li.local {
-  background: mistyrose;
-}
-
-.peers li.inAppTransportDiasSet {
-  background: lavender;
-}
-
-.peers li.inCollaborationDiasSet {
-  border: 1px solid purple;
 }
 
 .peers li.isPending {
@@ -85,7 +72,24 @@ h1, h1 + p {
   border: 1px solid red;
 }
 
-.peers ul li.local::before {
+.peers li div {
+  background: whitesmoke;
+  border-radius: 0.3rem;
+  padding: 0.2rem;
+}
+.peers li div.local {
+  background: mistyrose;
+}
+
+.peers li div.inAppTransportDiasSet {
+  background: lavender;
+}
+
+.peers li div.inCollaborationDiasSet {
+  border: 1px solid purple;
+}
+
+.peers ul li div.local::before {
   content: "▶";
   color: #666666;
   display: inline-block;
@@ -96,7 +100,7 @@ h1, h1 + p {
 
 .peers ul li {
   margin-right: 0.5rem;
-  padding: 0.2rem 0.4rem;
+  padding: 1px;
 }
 
 .CodeMirror {
