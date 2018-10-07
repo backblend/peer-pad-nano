@@ -71,18 +71,27 @@ export default class Peers extends Component {
           ...failedPeers
         ])
       : peers
-    const peerIdsSeen = Array
+    const peerIdsCollab = Array
       .from(peersAndClockPeers)
       .filter(peerId => collaborationRing.has(peerId) || peerId === ipfsId)
+      .sort()
+    const peerIdsApp = Array
+      .from(peersAndClockPeers)
+      .filter(peerId => (
+                          appTransportRing.has(peerId)
+                        ) &&
+                        !collaborationRing.has(peerId) &&
+                        peerId !== ipfsId
+      )
       .sort()
     const peerIdsOther = Array
       .from(peersAndClockPeers)
       .filter(peerId => (
-                          appTransportRing.has(peerId) ||
                           pendingPeers.has(peerId) ||
                           testingPeers.has(peerId) ||
                           failedPeers.has(peerId)
                         ) &&
+                        !appTransportRing.has(peerId) &&
                         !collaborationRing.has(peerId) &&
                         peerId !== ipfsId
       )
@@ -99,9 +108,26 @@ export default class Peers extends Component {
       .sort()
     return (
       <div className="peers">
-        Seen:
+        Collab:
         <ul>
-          {peerIdsSeen.map((id) => (
+          {peerIdsCollab.map((id) => (
+            <PeerItem
+              key={id}
+              id={id}
+              clock={localClock && localClock[id]}
+              local={id === ipfsId}
+              connections={connections}
+              inAppTransportDiasSet={appTransportDiasSet.has(id)}
+              inCollaborationDiasSet={collaborationDiasSet.has(id)}
+              isPending={pendingPeers.has(id)}
+              isTesting={testingPeers.has(id)}
+              isFailed={failedPeers.has(id)}
+            />
+          ))}
+        </ul><br/>
+        App:
+        <ul>
+          {peerIdsApp.map((id) => (
             <PeerItem
               key={id}
               id={id}
