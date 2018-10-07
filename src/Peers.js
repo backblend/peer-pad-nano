@@ -147,28 +147,32 @@ export default class Peers extends Component {
         </ul><br/>
         Legend:
         <ul>
-          <li>Peer</li>
-          <li className="local">Local</li>
-          <li className="inAppTransportDiasSet">Transport Dias Set</li>
-          <li className="inCollaborationDiasSet">Collab Dias Set</li>
-          <li>
+          <li><div>Peer</div></li>
+          <li><div className="local">Local</div></li>
+          <li><div className="inAppTransportDiasSet">
+            Transport Dias Set
+          </div></li>
+          <li><div className="inCollaborationDiasSet">
+            Collab Dias Set
+          </div></li>
+          <li><div>
             <span style={{borderBottom: '2px dotted blue'}}>
               Disconnected
             </span>
-          </li>
-          <li>
+          </div></li>
+          <li><div>
             <span style={{borderBottom: '2px dashed blue'}}>
               Half-connected
             </span>
-          </li>
-          <li>
+          </div></li>
+          <li><div>
             <span style={{borderBottom: '2px solid blue'}}>
               Connected
             </span>
-          </li>
-          <li className="isPending">Pending</li>
-          <li className="isTesting">Testing</li>
-          <li className="isFailed">Failed</li>
+          </div></li>
+          <li className="isPending"><div>Pending</div></li>
+          <li className="isTesting"><div>Testing</div></li>
+          <li className="isFailed"><div>Failed</div></li>
         </ul>
       </div>
     )
@@ -222,19 +226,23 @@ const PeerItem = ({
     borderBottom: `2px ${borderStyle} ${peerColor(id)}`
   }
   const classes = classNames({
-    local,
-    inAppTransportDiasSet,
-    inCollaborationDiasSet,
     isPending,
     isTesting,
     isFailed
   })
+  const innerClasses = classNames({
+    local,
+    inAppTransportDiasSet,
+    inCollaborationDiasSet,
+  })
   return (
     <li className={classes}>
-      <span style={style}>
-        {id.slice(id.length - 3)}
-      </span>
-      {clock && <span>{' '}{clock}</span>}
+      <div className={innerClasses}>
+        <span style={style}>
+          {id.slice(id.length - 3)}
+        </span>
+        {clock && <span>{' '}{clock}</span>}
+      </div>
     </li>
   )
 }
