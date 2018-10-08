@@ -80,7 +80,7 @@ export default class Peers extends Component {
       .filter(peerId => (
                           appTransportRing.has(peerId)
                         ) &&
-                        !collaborationRing.has(peerId) &&
+                        // !collaborationRing.has(peerId) &&
                         peerId !== ipfsId
       )
       .sort()
