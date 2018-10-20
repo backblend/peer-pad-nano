@@ -163,7 +163,7 @@ class Edit extends Component {
           })
         )
         const pendingPeers = new Set(
-          Object.keys(appTransport.discovery._peersPending)
+          Object.keys(appTransport.discovery._peersPending || {})
         )
         if (pendingPeers.size > 0) {
           console.log(
@@ -172,7 +172,7 @@ class Edit extends Component {
           )
         }
         const testingPeers = new Set(
-          Object.keys(appTransport.discovery._peersTesting)
+          Object.keys(appTransport.discovery._peersTesting || {})
         )
         if (testingPeers.size > 0) {
           console.log(
@@ -181,7 +181,7 @@ class Edit extends Component {
           )
         }
         const failedPeers = new Set(
-          Object.keys(appTransport.discovery._peersFailed)
+          Object.keys(appTransport.discovery._peersFailed || {})
         )
         if (failedPeers.size > 0) {
           console.log(
