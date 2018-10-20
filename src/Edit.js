@@ -165,30 +165,12 @@ class Edit extends Component {
         const pendingPeers = new Set(
           Object.keys(appTransport.discovery._peersPending || {})
         )
-        if (pendingPeers.size > 0) {
-          console.log(
-            'Jim pending',
-            [...pendingPeers].map(id => id.slice(-3)).join(' ')
-          )
-        }
         const testingPeers = new Set(
           Object.keys(appTransport.discovery._peersTesting || {})
         )
-        if (testingPeers.size > 0) {
-          console.log(
-            'Jim testing',
-            [...testingPeers].map(id => id.slice(-3)).join(' ')
-          )
-        }
         const failedPeers = new Set(
           Object.keys(appTransport.discovery._peersFailed || {})
         )
-        if (failedPeers.size > 0) {
-          console.log(
-            'Jim failed',
-            [...failedPeers].map(id => id.slice(-3)).join(' ')
-          )
-        }
         this.setState({
           localClock,
           appTransportRing,
