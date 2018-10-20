@@ -164,13 +164,13 @@ class Edit extends Component {
           })
         )
         const pendingPeers = new Set(
-          Object.keys(appTransport.discovery._peersPending)
+          Object.keys(appTransport.discovery._peersPending || {})
         )
         const testingPeers = new Set(
-          Object.keys(appTransport.discovery._peersTesting)
+          Object.keys(appTransport.discovery._peersTesting || {})
         )
         const failedPeers = new Set(
-          Object.keys(appTransport.discovery._peersFailed)
+          Object.keys(appTransport.discovery._peersFailed || {})
         )
         this.setState({
           localClock,
