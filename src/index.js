@@ -22,7 +22,7 @@ class App extends Component {
     // let match = hash.match(/^#\/([^/]+)$/)
     const match = [
       null,
-      '728Q2VZWAzdtYHZyahRPbfFYJCsXKK6tDAj2TWKSGAEA'
+      '374CoC8K9rdA1oGYEnwF4TCcsnL6McUfMj9ESc2rBRpr'
     ]
     if (match) {
       const [_, name] = match
