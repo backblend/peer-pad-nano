@@ -24,6 +24,8 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
         for (let i = text.length - 1; i >= 0; i--) {
           try {
             // deltas.push(transaction.removeAt(pos + i))
+            console.log('%cJim bind-editor removeAt',
+              'color: white; background: black', pos + i)
             doc.shared.removeAt(pos + i)
             pending = true
           } catch (err) {
@@ -33,6 +35,8 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
       } else { // INSERT
         // deltas.push(transaction.insertAllAt(pos, text.split('')))
         doc.shared.insertAllAt(pos, text.split(''))
+          console.log('%cJim bind-editor insertAllAt',
+            'color: white; background: black', pos, text)
         pending = true
         pos += text.length
       }
@@ -64,18 +68,26 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
       const diffs = Diff(crdtText, editorText)
       console.log('Jim diffs', diffs)
 
+      /*
       console.log('Assertion')
       const state = doc.shared.state()
       const addedVertices = [...state[0]]
       for (let av of addedVertices) {
         console.log('av', av)
       }
+      */
 
       applyDiffs(0, diffs, editorText)
     })
   }
 
-  editor.on('change', throttle(onCodeMirrorChange, 100))
+  editor.on('change', () => {
+    console.log('codemirror change event', locked)
+    if (locked) return
+    throttledOnCodeMirrorChange(editor)
+  })
+
+  const throttledOnCodeMirrorChange = throttle(onCodeMirrorChange, 100)
 
   const onStateChanged = (fromSelf) => {
     if (fromSelf) {
@@ -89,7 +101,7 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
 
       if (oldText === newText || committedText === newText || pending) {
         pending = false
-        onCodeMirrorChange(editor)
+        // onCodeMirrorChange(editor)
         return
       }
 
@@ -101,12 +113,14 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
       console.log('Jim editorText\n', editorText2)
       console.log('Jim CRDT text\n', doc.shared.value().join(''))
 
+      /*
       console.log('Assertion')
       const state = doc.shared.state()
       const addedVertices = [...state[0]]
       for (let av of addedVertices) {
         console.log('av', av)
       }
+      */
 
       const cursor = editor.getCursor()
       let cursorPos = editor.indexFromPos(cursor)
@@ -143,10 +157,12 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
         }
       })
       editor.setCursor(editor.posFromIndex(cursorPos))
+      const editorText3 = editor.getValue()
+      console.log('Jim final editorText3\n', editorText3)
 
       locked = false
       pending = false
-      onCodeMirrorChange(editor)
+      // onCodeMirrorChange(editor)
     })
   }
 
