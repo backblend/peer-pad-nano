@@ -12,7 +12,7 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
   let committedText
 
   const applyDiffs = (pos, diffs, editorText) => {
-    console.log('Jim applyDiffs start')
+    // console.log('Jim applyDiffs start')
     // const transaction = CRDT('rga')('t')
     // transaction.apply(doc.shared.state())
     // const deltas = []
@@ -24,8 +24,10 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
         for (let i = text.length - 1; i >= 0; i--) {
           try {
             // deltas.push(transaction.removeAt(pos + i))
+            /*
             console.log('%cJim bind-editor removeAt',
               'color: white; background: black', pos + i)
+            */
             doc.shared.removeAt(pos + i)
             pending = true
           } catch (err) {
@@ -35,8 +37,10 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
       } else { // INSERT
         // deltas.push(transaction.insertAllAt(pos, text.split('')))
         doc.shared.insertAllAt(pos, text.split(''))
-          console.log('%cJim bind-editor insertAllAt',
-            'color: white; background: black', pos, text)
+        /*
+        console.log('%cJim bind-editor insertAllAt',
+          'color: white; background: black', pos, text)
+        */
         pending = true
         pos += text.length
       }
@@ -44,7 +48,7 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
     // FIXME: Faster if applying only joined deltas?
     // doc.shared.apply(transaction.state())
     let newText = doc.shared.value().join('')
-    console.log('Jim applyDiffs done\n', newText)
+    // console.log('Jim applyDiffs done\n', newText)
     if (newText !== editorText) {
       console.error('Mismatch!!!!!!!!!!!!!!!!')
     }
@@ -61,12 +65,14 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
         return
       }
       editorText = editor.getValue()
+      /*
       console.log('Jim codemirror changed, update CRDT to match codemirror')
       console.log('Jim editorText\n', editorText)
+      */
       const crdtText = doc.shared.value().join('')
-      console.log('Jim CRDT text\n', crdtText)
+      // console.log('Jim CRDT text\n', crdtText)
       const diffs = Diff(crdtText, editorText)
-      console.log('Jim diffs', diffs)
+      // console.log('Jim diffs', diffs)
 
       /*
       console.log('Assertion')
@@ -82,7 +88,7 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
   }
 
   editor.on('change', () => {
-    console.log('codemirror change event', locked)
+    // console.log('codemirror change event', locked)
     if (locked) return
     throttledOnCodeMirrorChange(editor)
   })
@@ -106,12 +112,14 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
       }
 
       locked = true
+      /*
       console.log('Jim CRDT changed, update codemirror to match')
       console.log('Jim pending', pending)
       console.log('Jim oldText\n', oldText)
       const editorText2 = editor.getValue()
       console.log('Jim editorText\n', editorText2)
       console.log('Jim CRDT text\n', doc.shared.value().join(''))
+      */
 
       /*
       console.log('Assertion')
@@ -157,8 +165,10 @@ const bindCodeMirror = (doc, titleEditor, editor) => {
         }
       })
       editor.setCursor(editor.posFromIndex(cursorPos))
+      /*
       const editorText3 = editor.getValue()
       console.log('Jim final editorText3\n', editorText3)
+      */
 
       locked = false
       pending = false
