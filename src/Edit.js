@@ -113,6 +113,7 @@ class Edit extends Component {
     const self = this
 
     if (!this._backend) {
+      // this._backend = PeerStar('peer-star-dev', config.peerStar)
       this._backend = PeerStar('peer-star-demo', config.peerStar)
       this._backend.on('error', (err) => {
         console.error(err)
