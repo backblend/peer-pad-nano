@@ -112,6 +112,7 @@ class Edit extends Component {
     const self = this
 
     if (!this._backend) {
+      // this._backend = PeerStar('peer-star-dev', config.peerStar)
       this._backend = PeerStar('peer-star-demo', config.peerStar)
       this._backend.on('error', (err) => {
         console.error(err)
@@ -162,13 +163,13 @@ class Edit extends Component {
           })
         )
         const pendingPeers = new Set(
-          Object.keys(appTransport.discovery._peersPending)
+          Object.keys(appTransport.discovery._peersPending || {})
         )
         const testingPeers = new Set(
-          Object.keys(appTransport.discovery._peersTesting)
+          Object.keys(appTransport.discovery._peersTesting || {})
         )
         const failedPeers = new Set(
-          Object.keys(appTransport.discovery._peersFailed)
+          Object.keys(appTransport.discovery._peersFailed || {})
         )
         this.setState({
           localClock,
