@@ -1,4 +1,3 @@
-import CRDT from 'delta-crdts'
 import Diff from 'fast-diff'
 import throttle from 'lodash.throttle'
 import functionQueue from './fn-queue'
