@@ -9,8 +9,12 @@ export default class Editor extends Component {
     this.onRef = this.onRef.bind(this)
   }
 
+  shouldComponentUpdate () {
+    return false
+  }
+
   onRef (ref) {
-    const { onEditor, onChange } = this.props
+    const { onEditor } = this.props
     let editor
 
     if (ref) {
@@ -24,10 +28,6 @@ export default class Editor extends Component {
         lineWrapping: true,
         readOnly: 'nocursor'
       })
-
-      editor.on('change', () => {
-        if (onChange) onChange(editor.getValue(), editor)
-      })
     }
 
     if (onEditor) onEditor(editor)
@@ -39,6 +39,5 @@ export default class Editor extends Component {
 }
 
 Editor.propTypes = {
-  onEditor: PropTypes.func,
-  onChange: PropTypes.func
+  onEditor: PropTypes.func
 }

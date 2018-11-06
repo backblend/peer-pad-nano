@@ -59,10 +59,7 @@ class Edit extends Component {
       connections
     } = this.state
 
-    const {
-      onEditor,
-      onEditorValueChange
-    } = this
+    const {onEditor} = this
 
     const peers = <Peers
                     doc={doc}
@@ -92,18 +89,9 @@ class Edit extends Component {
         <Editor
           docType={type}
           onEditor={onEditor}
-          onEditorValueChange={onEditorValueChange}
         />
       </div>
     )
-  }
-
-  componentDidUpdate () {
-    // Force codemirror to update to help avoid render / write order issues
-    if (this._editor && this._editor.refresh) {
-      this._editor.refresh()
-      this._editor.setOption('readOnly', false)
-    }
   }
 
   async componentDidMount () {
@@ -182,7 +170,7 @@ class Edit extends Component {
           failedPeers
         })
       }
-    }, 1000)
+    }, 500)
 
     doc.on('error', (err) => {
       console.log(err)
@@ -225,6 +213,7 @@ class Edit extends Component {
   maybeActivateEditor () {
     if (!this._editorBinding && this._editor) {
       this._editorBinding = bindEditor(this.state.doc, this._titleRef, this._editor, this.state.type)
+      this._editor.setOption('readOnly', false)
     }
   }
 }
