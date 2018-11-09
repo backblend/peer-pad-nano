@@ -6,37 +6,44 @@ import './index.css'
 class App extends Component {
   constructor (props) {
     super(props)
-    this.state = { hash: location.hash }
-    this.setHash = this.setHash.bind(this)
-  }
-  componentDidMount () {
-    window.addEventListener('hashchange', this.setHash, false)
+    this.state = { name: this.getName() }
   }
 
-  setHash () {
-    this.setState({hash: location.hash})
+  getName () {
+    const host = location.hostname
+    if (host.match(/\.peer-pad-nano-dev\.jimpick\.com$/)) {
+      return host.replace(/\.peer-pad-nano-dev\.jimpick\.com$/, '') // Dev
+    }
+    if (host.match(/\.ppn\.v6z\.me$/)) {
+      return host.replace(/\.ppn\.v6z\.me$/, '') // Prod
+    }
   }
 
   render () {
-    const { hash } = this.state
-    let match = hash.match(/^#\/([^/]+)$/)
-    if (match) {
-      const [_, name] = match
+    const { name } = this.state
+    if (name) {
       return <Edit name={name} />
     } else {
       return (
         <div>
           <h1>PeerPad Nano</h1>
-          <button onClick={this.onCreateDocument}>START</button>
+          <div>
+          <input id="doc" type="text" autoComplete="false"></input><span>.ppn.v6z.me</span>
+          <button id="goBtn" onClick={this.onGo}>Go</button>
+          </div>
         </div>
       )
     }
   }
 
-  async onCreateDocument () {
-    const generateRandomName = await import('@jimpick/peer-star-app/src/keys/generate-random-name')
-    const name = encodeURIComponent(generateRandomName())
-    location.hash = `/${name}`
+  async onGo () {
+    const name = document.getElementById('doc').value
+    if (!name) {
+      alert('Need a name!')
+      return
+    }
+    // FIXME: Validate/encode name
+    location.href = `https://${name}.${location.host}/`
   }
 }
 

@@ -19,6 +19,13 @@ class Edit extends Component {
       status: 'offline',
       doc: null
     }
+    if (location.hostname.match(/\.peer-pad-nano-dev\.jimpick\.com$/)) {
+      this.homeUrl = 'https://peer-pad-nano-dev.jimpick.com/'
+    } else if (location.hostname.match(/\.ppn.v6z.me$/)) {
+      this.homeUrl = 'https://ppn.v6z.me/'
+    } else {
+      throw new Error('Unrecognized')
+    }
 
     this.onEditor = this.onEditor.bind(this)
   }
@@ -59,7 +66,7 @@ class Edit extends Component {
       connections
     } = this.state
 
-    const {onEditor} = this
+    const {homeUrl, onEditor} = this
 
     const peers = <Peers
                     doc={doc}
@@ -76,7 +83,7 @@ class Edit extends Component {
                   />
     return (
       <div className="doc">
-        <a href='#'>PeerPad Nano Home</a>
+        <a href={homeUrl}>PeerPad Nano Home</a>
         <div className="status">
           <span>App: {doc ? doc.app.name : 'Loading'}</span>
           <span>Collaboration: {doc ? prettyHash(doc.name) : 'Loading'}</span>

@@ -1,3 +1,7 @@
+button#goBtn {
+  margin-left: 1rem;
+}
+
 .doc {
   display: flex;
   flex-direction: column;
